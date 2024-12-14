@@ -1,101 +1,63 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from 'components/ui/Form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import * as z from 'zod';
+import Tiptap from 'components/Tiptap';
+import { Button } from 'components/ui/Button';
+import Container from 'components/elements/Container';
+
+const Home = () => {
+  const formSchema = z.object({
+    content: z.string().min(1).max(99999).trim(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    defaultValues: {
+      content: `<h1>The Ancient Pyramids of Egypt</h1><p>The pyramids of Egypt are among the most iconic and enduring symbols of human civilization. Constructed over 4,500 years ago during the Old and Middle Kingdom periods, these monumental structures continue to captivate the imagination of scholars, travelers, and history enthusiasts alike. The pyramids were built as grand tombs for pharaohs and elite members of ancient Egyptian society, reflecting the civilization's profound religious beliefs and advanced engineering capabilities.</p><p></p><h2 class="text-xl font-bold">Historical Context</h2><p>The most famous pyramids were constructed during Egypt's Old Kingdom, often referred to as the "Age of the Pyramids" (circa 2686–2181 BCE). This era saw the emergence of a strong centralized state and the development of a highly organized workforce capable of undertaking such massive construction projects. The earliest known pyramid is the Step Pyramid of Djoser at Saqqara, designed by the architect Imhotep around 2670 BCE. This structure marked a significant departure from earlier mastaba tombs and laid the foundation for the later true pyramids.</p><p>The pinnacle of pyramid construction occurred during the Fourth Dynasty (circa 2613–2494 BCE), particularly under the reigns of Pharaohs Sneferu, Khufu, Khafre, and Menkaure. The Great Pyramid of Giza, built for Khufu (also known as Cheops), is the largest and most famous of all. It originally stood at 146.6 meters (481 feet) and was constructed using over two million limestone and granite blocks, each weighing several tons.</p><p></p><h2 class="text-xl font-bold">Design and Construction</h2><p>The construction of the pyramids remains a subject of fascination and debate. Ancient Egyptian builders employed a combination of skilled labor, precise planning, and ingenious techniques. Workers likely used ramps, sledges, and levers to transport and position the massive stones. The alignment of the pyramids is astonishingly precise, with the Great Pyramid aligned almost perfectly with the cardinal points of the compass.</p><p>The internal structure of the pyramids includes narrow passageways, chambers, and shafts. The king’s chamber, usually located at the heart of the pyramid, often contained a sarcophagus and grave goods intended to accompany the pharaoh into the afterlife. The intricate planning and execution of these designs demonstrate the advanced understanding of mathematics and engineering possessed by the ancient Egyptians.</p><p></p><h2 class="text-xl font-bold">Religious and Cultural Significance</h2><p>The pyramids were more than just tombs; they were profound expressions of Egyptian religious beliefs. Ancient Egyptians viewed the pharaoh as a divine intermediary between the gods and humanity. Upon death, the pharaoh was believed to ascend to the afterlife and unite with the sun god Ra. The pyramid’s shape, with its sloping sides, symbolized the rays of the sun and served as a staircase for the pharaoh’s journey to the heavens.</p><p>The construction of a pyramid was a colossal undertaking that required the mobilization of resources and labor on an unprecedented scale. Recent discoveries suggest that the workforce was composed of skilled laborers and seasonal workers rather than slaves, as previously thought. These workers were housed in nearby communities and provided with food, medical care, and tools, underscoring the complexity of ancient Egyptian society.`,
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <>
+      <Container>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name='content'
+              render={({ field }) => (
+                <FormItem>
+                  {/* <FormLabel>Content</FormLabel> */}
+                  <FormControl className='min-h-[400px]'>
+                    <Tiptap content={field.value} onChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <Button className='my-4' type='submit'>
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </Container>
+    </>
   );
-}
+};
+
+export default Home;
