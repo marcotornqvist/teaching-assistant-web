@@ -1,5 +1,4 @@
 import Container from 'components/elements/Container';
-import { link } from 'fs';
 import { cn } from 'lib/utils';
 import Link from 'next/link';
 import React from 'react';
@@ -11,7 +10,7 @@ const Header = () => {
         <Link href='/' className='font-bold'>
           Assistant AI
         </Link>
-        {/* <Links className='max-lg:hidden' /> */}
+        <Links className='max-lg:hidden' />
       </Container>
     </nav>
   );
