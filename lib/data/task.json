@@ -1,0 +1,78 @@
+{
+  "success": true,
+  "message": "Content received",
+  "data": {
+    "title": "The Ancient Pyramids of Egypt",
+    "questions": [
+      {
+        "question": "When were the pyramids of Egypt constructed?",
+        "answers": {
+          "choices": [
+            {
+              "text": "About 4,500 years ago",
+              "isCorrect": true
+            },
+            {
+              "text": "During the New Kingdom period",
+              "isCorrect": false
+            },
+            {
+              "text": "3,500 years ago",
+              "isCorrect": false
+            },
+            {
+              "text": "5,500 years ago",
+              "isCorrect": false
+            }
+          ]
+        }
+      },
+      {
+        "question": "What was the main purpose of building the pyramids in ancient Egypt?",
+        "answers": {
+          "choices": [
+            {
+              "text": "To serve as grand tombs for pharaohs and elite members",
+              "isCorrect": true
+            },
+            {
+              "text": "To be used as community gathering places",
+              "isCorrect": false
+            },
+            {
+              "text": "To act as defensive fortresses",
+              "isCorrect": false
+            },
+            {
+              "text": "To function as ancient marketplaces",
+              "isCorrect": false
+            }
+          ]
+        }
+      },
+      {
+        "question": "Which aspects of ancient Egyptian society do the pyramids reflect?",
+        "answers": {
+          "choices": [
+            {
+              "text": "Profound religious beliefs and advanced engineering capabilities",
+              "isCorrect": true
+            },
+            {
+              "text": "The need for agricultural expansion and food storage",
+              "isCorrect": false
+            },
+            {
+              "text": "Their interest in artistic expression and literature",
+              "isCorrect": false
+            },
+            {
+              "text": "Their skills in naval exploration and trade",
+              "isCorrect": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
