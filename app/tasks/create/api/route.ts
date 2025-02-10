@@ -56,10 +56,31 @@ export const POST = async (req: NextRequest) => {
 
     const event = completion.choices[0].message.parsed;
 
+    if (!event) {
+      throw new Error('Invalid response from OpenAI');
+    }
+
+    const questions = event?.questions.map((question) => {
+      const answers = question.answers.map((answer) => ({
+        answerId: Math.random().toString(36).substring(7),
+        ...answer,
+      }));
+
+      return {
+        questionId: Math.random().toString(36).substring(7),
+        ...question,
+        answers,
+      };
+    });
+
     return Response.json({
       success: true,
       message: 'Content received',
-      data: event,
+      data: {
+        title: event.title,
+        content,
+        questions,
+      },
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

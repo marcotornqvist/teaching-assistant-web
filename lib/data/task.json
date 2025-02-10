@@ -3,75 +3,137 @@
   "message": "Content received",
   "data": {
     "title": "The Ancient Pyramids of Egypt",
+    "content": "The Ancient Pyramids of Egypt The pyramids of Egypt are among the most iconic and enduring symbols of human civilization. Constructed over 4,500 years ago during the Old and Middle Kingdom periods, these monumental structures continue to captivate the imagination of scholars, travelers, and history enthusiasts alike. The pyramids were built as grand tombs for pharaohs and elite members of ancient Egyptian society, reflecting the civilization's profound religious beliefs and advanced engineering capabilities.",
     "questions": [
       {
-        "question": "When were the pyramids of Egypt constructed?",
-        "answers": {
-          "choices": [
-            {
-              "text": "About 4,500 years ago",
-              "isCorrect": true
-            },
-            {
-              "text": "During the New Kingdom period",
-              "isCorrect": false
-            },
-            {
-              "text": "3,500 years ago",
-              "isCorrect": false
-            },
-            {
-              "text": "5,500 years ago",
-              "isCorrect": false
-            }
-          ]
-        }
+        "questionId": "fggqht",
+        "question": "During which periods were the pyramids of Egypt constructed?",
+        "answers": [
+          {
+            "answerId": "fru92p",
+            "text": "Old and Middle Kingdom periods",
+            "isCorrect": true
+          },
+          {
+            "answerId": "yjdmqr",
+            "text": "New and Late Kingdom periods",
+            "isCorrect": false
+          },
+          {
+            "answerId": "ybbgn5",
+            "text": "Prehistoric and Early Kingdom periods",
+            "isCorrect": false
+          },
+          {
+            "answerId": "pxj0k",
+            "text": "First and Second Intermediate periods",
+            "isCorrect": false
+          }
+        ]
       },
       {
-        "question": "What was the main purpose of building the pyramids in ancient Egypt?",
-        "answers": {
-          "choices": [
-            {
-              "text": "To serve as grand tombs for pharaohs and elite members",
-              "isCorrect": true
-            },
-            {
-              "text": "To be used as community gathering places",
-              "isCorrect": false
-            },
-            {
-              "text": "To act as defensive fortresses",
-              "isCorrect": false
-            },
-            {
-              "text": "To function as ancient marketplaces",
-              "isCorrect": false
-            }
-          ]
-        }
+        "questionId": "d33aj3",
+        "question": "What purpose did the pyramids serve in ancient Egypt?",
+        "answers": [
+          {
+            "answerId": "z6qoyg",
+            "text": "Grand tombs for pharaohs and elites",
+            "isCorrect": true
+          },
+          {
+            "answerId": "nk3qnk",
+            "text": "Residential palaces for the wealthy",
+            "isCorrect": false
+          },
+          {
+            "answerId": "ajf372",
+            "text": "Military fortifications against invaders",
+            "isCorrect": false
+          },
+          {
+            "answerId": "pgxiff",
+            "text": "Public libraries and schools",
+            "isCorrect": false
+          }
+        ]
       },
       {
-        "question": "Which aspects of ancient Egyptian society do the pyramids reflect?",
-        "answers": {
-          "choices": [
-            {
-              "text": "Profound religious beliefs and advanced engineering capabilities",
-              "isCorrect": true
-            },
-            {
-              "text": "The need for agricultural expansion and food storage",
-              "isCorrect": false
-            },
-            {
-              "text": "Their interest in artistic expression and literature",
-              "isCorrect": false
-            },
-            {
-              "text": "Their skills in naval exploration and trade",
-              "isCorrect": false
-            }
-          ]
-        }
+        "questionId": "rce1n",
+        "question": "How long ago were the pyramids of Egypt constructed?",
+        "answers": [
+          {
+            "answerId": "m9j6ak",
+            "text": "Over 4,500 years ago",
+            "isCorrect": true
+          },
+          {
+            "answerId": "qmi1b",
+            "text": "About 2,000 years ago",
+            "isCorrect": false
+          },
+          {
+            "answerId": "lsht6f",
+            "text": "Less than 1,000 years ago",
+            "isCorrect": false
+          },
+          {
+            "answerId": "iiwdla",
+            "text": "Approximately 5,000 years ago",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionId": "insl62",
+        "question": "What do the pyramids of Egypt primarily symbolize?",
+        "answers": [
+          {
+            "answerId": "jahnht",
+            "text": "Human civilization and ingenuity",
+            "isCorrect": true
+          },
+          {
+            "answerId": "0jfvk",
+            "text": "The decline of ancient Egypt",
+            "isCorrect": false
+          },
+          {
+            "answerId": "frenzh",
+            "text": "The domination of Greece",
+            "isCorrect": false
+          },
+          {
+            "answerId": "zn0aj",
+            "text": "The isolation of the ancient world",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionId": "ho7fng",
+        "question": "What aspects of ancient Egyptian culture do the pyramids reflect?",
+        "answers": [
+          {
+            "answerId": "ywuh2b",
+            "text": "Religious beliefs and engineering capabilities",
+            "isCorrect": true
+          },
+          {
+            "answerId": "e1gin",
+            "text": "Dietary practices and fashion",
+            "isCorrect": false
+          },
+          {
+            "answerId": "jb3pjw",
+            "text": "Hunting techniques and artistic styles",
+            "isCorrect": false
+          },
+          {
+            "answerId": "7vu89g",
+            "text": "Trade routes and agricultural methods",
+            "isCorrect": false
+          }
+        ]
       }
     ]
   }
