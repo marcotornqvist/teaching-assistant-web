@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
+import fs from 'fs/promises';
+import path from 'path';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -73,14 +75,21 @@ export const POST = async (req: NextRequest) => {
       };
     });
 
+    const result = {
+      title: event.title,
+      content,
+      questions,
+    }; 
+
+    await fs.writeFile(
+      path.join(process.cwd(), 'lib/data/task.json'),
+      JSON.stringify(result, null, 2),
+    );
+
     return Response.json({
       success: true,
       message: 'Content received',
-      data: {
-        title: event.title,
-        content,
-        questions,
-      },
+      data: result,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

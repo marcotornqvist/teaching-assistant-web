@@ -9,7 +9,7 @@ const Container = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className={cn('w-full px-4 pt-8 lg:px-10', className)}>{children}</div>
+    <div className={cn('w-full px-4 lg:px-10', className)}>{children}</div>
   );
 };
 

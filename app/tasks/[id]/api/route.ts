@@ -8,11 +8,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// 1. Import the mock data from /lib/data/task.json (before having the real data)
-// 2. Get the questions and filter out only the answers which are correct.
-// 3. With the correct answers, users can submit their answers and compare them with the correct answers and the original question to see if they are correct. Add a certaintity score to the answers to see how confident the AI is in the answer. The teacher will then be able to manually grade the answers. Perhaps the AI can also provide reasoning for the evaluation.
-// 4. The teacher can then grade the answers and provide feedback to the user. The user can then see the feedback and the grade.
-
 const QuestionSchema = z.object({
   feedbackResponse: z.string(),
   isCorrect: z.boolean(),
@@ -39,9 +34,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const originalContent = taskData.data.content;
-
-    const answeredQuestions = taskData.data.questions
+    const answeredQuestions = taskData.questions
       .map((question) => {
         const userAnswer = answers.find(
           (answer) => answer.questionId === question.questionId,
@@ -69,7 +62,7 @@ export const POST = async (req: NextRequest) => {
           messages: [
             {
               role: 'system',
-              content: `You are a teacher that goes through the students answer for a question. Use the original content and the correct answers as a reference to grade the students answer. Here is the original content which generated the question: ${originalContent}. Here is the question: ${q.question} Here are the answers:\n${correctAnswers
+              content: `You are a teacher that goes through the students answer for a question. Use the original content and the correct answers as a reference to grade the students answer. Here is the original content which generated the question: ${taskData.content}. Here is the question: ${q.question} Here are the answers:\n${correctAnswers
                 .map((a) => `- ${a.text}`)
                 .join('\n')}`,
             },
