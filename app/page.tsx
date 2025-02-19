@@ -4,6 +4,8 @@ import { DashboardCardProps } from 'components/misc/dashboard-cards/DashboardCar
 import DashboardCards from 'components/misc/dashboard-cards/DashboardCards';
 import React from 'react';
 
+// TODO: Convert the materials and tasks part of the link to a static link in a separate links file.
+
 const materialsData: DashboardCardProps[] = [
   {
     link: '/materials/the-ancient-pyramids-of-egypt',

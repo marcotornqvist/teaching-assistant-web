@@ -19,7 +19,7 @@ const DashboardCard = ({ link, title, className }: DashboardCardProps) => {
       )}
     >
       <div className='flex w-full items-end justify-between'>
-        <h3 className='pr-5 text-sm font-medium text-black'>{title}</h3>
+        <h3 className='text-sm-medium pr-5 text-black'>{title}</h3>
         <ArrowRight
           strokeWidth={2}
           width={20}

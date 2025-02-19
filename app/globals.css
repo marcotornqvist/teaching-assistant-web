@@ -4,14 +4,14 @@
 
 @layer base {
   * {
-    @apply border-grey;
-  }
-
-  body {
-    @apply font-main bg-dark-grey antialiased;
+    @apply font-main border-grey;
   }
 
   html {
     font-family: var(--font-inter);
+  }
+
+  body {
+    @apply dark:bg-dark-grey bg-white text-black antialiased dark:text-white;
   }
 }

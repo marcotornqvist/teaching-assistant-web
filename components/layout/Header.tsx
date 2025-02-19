@@ -8,8 +8,8 @@ const Header = () => {
   return (
     <nav className='flex min-h-16 items-center border-b lg:min-h-20'>
       <div className='flex w-full items-center justify-between px-4 pt-0 lg:px-6'>
-        <Link href='/' className='-ml-2 p-2 font-bold dark:text-white'>
-          Assistant AI
+        <Link href='/' className='text-lg-bold -ml-2 p-2'>
+          AI Assistant
         </Link>
         <ToggleMode className='-mr-2' />
         {/* <Links className='max-lg:hidden' /> */}

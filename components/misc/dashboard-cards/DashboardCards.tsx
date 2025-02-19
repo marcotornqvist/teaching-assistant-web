@@ -11,7 +11,7 @@ type DashboardCardsProps = {
 const DashboardCards = ({ cards, type, className }: DashboardCardsProps) => {
   return (
     <div className={cn('', className)}>
-      <h2 className='mb-2 px-4 font-medium'>
+      <h2 className='text-base-medium mb-2 px-4'>
         {type === 'materials' ? 'Materials' : 'Tasks'}
       </h2>
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>

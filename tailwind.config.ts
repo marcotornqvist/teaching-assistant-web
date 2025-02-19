@@ -7,6 +7,7 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     fontFamily: {
       main: ['var(--font-inter)'],
@@ -29,121 +30,33 @@ export default {
     require('tailwindcss-animate'),
     plugin(function ({ addComponents }) {
       addComponents({
-        '.text-mobile-h1': {
-          fontSize: '2.5rem',
+        '.text-xl-bold': {
+          fontSize: '1.25rem',
           fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-mobile-h2': {
-          fontSize: '2.25rem',
-          fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-mobile-h3': {
-          fontSize: '2rem',
-          fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-mobile-h4': {
-          fontSize: '1.75rem',
-          fontWeight: '700',
-          lineHeight: '140%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-mobile-h5': {
-          fontSize: '1.5rem',
-          fontWeight: '700',
-          lineHeight: '140%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-desktop-h1': {
-          fontSize: '3.5rem',
-          fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-desktop-h2': {
-          fontSize: '3rem',
-          fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-desktop-h3': {
-          fontSize: '2.5rem',
-          fontWeight: '700',
-          lineHeight: '120%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-desktop-h4': {
-          fontSize: '2rem',
-          fontWeight: '700',
-          lineHeight: '130%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-desktop-h5': {
-          fontSize: '1.75rem',
-          fontWeight: '700',
-          lineHeight: '140%',
-          fontFamily: 'var(--font-title)',
-        },
-
-        '.text-tiny-normal': {
-          fontSize: '0.75rem',
-          fontWeight: '400',
           lineHeight: '150%',
         },
 
-        '.text-small-normal': {
-          fontSize: '0.875rem',
-          fontWeight: '400',
+        '.text-lg-bold': {
+          fontSize: '1.125rem',
+          fontWeight: '700',
           lineHeight: '150%',
         },
 
-        '.text-regular-normal': {
-          fontSize: '1rem',
-          fontWeight: '400',
+        '.text-lg-medium': {
+          fontSize: '1.125rem',
+          fontWeight: '500',
           lineHeight: '150%',
         },
 
-        '.text-normal-normal': {
-          fontSize: '1rem',
-          fontWeight: '400',
-          lineHeight: '150%',
-        },
-
-        '.text-normal-medium': {
+        '.text-base-medium': {
           fontSize: '1rem',
           fontWeight: '500',
           lineHeight: '150%',
         },
 
-        '.text-medium-normal': {
-          fontSize: '1.125rem',
-          fontWeight: '400',
-          lineHeight: '150%',
-        },
-
-        '.text-medium-semibold': {
-          fontSize: '1.125rem',
-          fontWeight: '600',
-          lineHeight: '150%',
-        },
-
-        '.text-medium-bold': {
-          fontSize: '1.125rem',
-          fontWeight: '700',
+        '.text-sm-medium': {
+          fontSize: '0.875rem',
+          fontWeight: '500',
           lineHeight: '150%',
         },
       });
