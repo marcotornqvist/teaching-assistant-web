@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Header from 'components/layout/Header';
+
 import ThemeProvider from 'lib/context/ThemeProvider';
 
 const inter = Inter({
@@ -21,17 +21,14 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en' className={inter.variable} suppressHydrationWarning>
-      <body className='min-h-screen antialiased'>
+      <body className='flex min-h-screen flex-col antialiased'>
         <ThemeProvider
           attribute='class'
           defaultTheme='black'
           enableSystem
           disableTransitionOnChange
         >
-          <div className=''>
-            <Header />
-            {children}
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

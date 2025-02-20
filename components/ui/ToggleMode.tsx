@@ -10,7 +10,7 @@ const ToggleMode = ({ className }: { className?: string }) => {
 
   return (
     <button
-      className={cn('p-2', className)}
+      className={cn('flex h-12 w-12 items-center justify-center', className)}
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       <SunMoon strokeWidth={1.5} className='h-[1.75rem] w-[1.75rem]' />

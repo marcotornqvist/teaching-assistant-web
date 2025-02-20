@@ -24,6 +24,12 @@ export default {
     },
     extend: {
       borderRadius: {},
+      width: {
+        75: '18.75rem',
+      },
+      minWidth: {
+        75: '18.75rem',
+      },
     },
   },
   plugins: [
