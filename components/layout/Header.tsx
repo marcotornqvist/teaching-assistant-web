@@ -19,7 +19,7 @@ const Header = ({ children, variant = 'default', className }: HeaderProps) => {
     >
       <div
         className={cn(
-          'min-w-75 flex items-center p-6 lg:min-h-20',
+          'min-w-75 flex items-center px-6 lg:min-h-20',
           variant === 'aside' ? 'border-r' : '',
         )}
       >

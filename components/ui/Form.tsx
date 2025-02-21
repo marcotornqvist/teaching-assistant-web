@@ -100,7 +100,7 @@ const FormLabel = ({
   return (
     <Label
       ref={ref}
-      className={cn(error && 'text-destructive', className)}
+      className={cn('!text-sm-bold ml-2', error && 'text-red', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -146,7 +146,7 @@ const FormDescription = ({
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );
@@ -172,7 +172,7 @@ const FormMessage = ({
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-destructive text-sm font-medium', className)}
+      className={cn('text-red text-sm', className)}
       {...props}
     >
       {body}

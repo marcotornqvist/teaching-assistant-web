@@ -59,7 +59,7 @@ const Tiptap = ({
     editorProps: {
       attributes: {
         class: cn(
-          'rounded-md border border-input bg-background focus:ring-offset-2 disabled:cursor-not-allows disabled:opacity-50 p-3',
+          'p-4 focus:outline-none max-h-[500px] overflow-y-scroll',
           className,
         ),
       },
@@ -70,9 +70,9 @@ const Tiptap = ({
   });
 
   return (
-    <div className='flex flex-col justify-stretch'>
+    <div className='border-grey focus-within:border-green flex flex-col justify-stretch rounded-md border bg-black'>
       <ToolBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent className='border-none outline-offset-4' editor={editor} />
     </div>
   );
 };

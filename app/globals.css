@@ -4,7 +4,7 @@
 
 @layer base {
   * {
-    @apply font-main border-grey;
+    @apply font-main border-grey outline-green focus-visible:outline-green;
   }
 
   html {

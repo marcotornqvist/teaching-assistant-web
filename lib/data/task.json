@@ -1,133 +1,133 @@
 {
-  "title": "The Ancient Pyramids of Egypt",
-  "content": "The Ancient Pyramids of Egypt The pyramids of Egypt are among the most iconic and enduring symbols of human civilization. Constructed over 4,500 years ago during the Old and Middle Kingdom periods, these monumental structures continue to captivate the imagination of scholars, travelers, and history enthusiasts alike. The pyramids were built as grand tombs for pharaohs and elite members of ancient Egyptian society, reflecting the civilization's profound religious beliefs and advanced engineering capabilities.",
+  "title": "General Knowledge Quiz",
+  "content": "<p></p>",
   "questions": [
     {
-      "questionId": "qo2ito",
-      "question": "What are the pyramids of Egypt considered as symbols of?",
+      "questionId": "5avft",
+      "question": "Which part of an HTML document contains the meta-information about the document?",
       "answers": [
         {
-          "answerId": "ejta6q",
-          "text": "Human civilization",
+          "answerId": "oxur29",
+          "text": "<head>",
           "isCorrect": true
         },
         {
-          "answerId": "p7wnwr",
-          "text": "Modern architecture",
+          "answerId": "2ng47",
+          "text": "<body>",
           "isCorrect": false
         },
         {
-          "answerId": "oo5i9a",
-          "text": "Ancient warfare tactics",
+          "answerId": "h205y",
+          "text": "<footer>",
           "isCorrect": false
         },
         {
-          "answerId": "r6j5a",
-          "text": "Underwater exploration",
+          "answerId": "bac3nj",
+          "text": "<header>",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "fryhop",
-      "question": "In which periods were the Egyptian pyramids primarily constructed?",
+      "questionId": "cjdtn",
+      "question": "What tag in HTML is used to create a hyperlink?",
       "answers": [
         {
-          "answerId": "h4eihf",
-          "text": "Old and Middle Kingdom periods",
+          "answerId": "wd1r9",
+          "text": "<a>",
           "isCorrect": true
         },
         {
-          "answerId": "w3k5s2",
-          "text": "New and Late Kingdom periods",
+          "answerId": "1qcqk",
+          "text": "<link>",
           "isCorrect": false
         },
         {
-          "answerId": "dwuy7",
-          "text": "Prehistoric and Archaic periods",
+          "answerId": "4ws7sp",
+          "text": "<h>",
           "isCorrect": false
         },
         {
-          "answerId": "x1lpi7",
-          "text": "Greco-Roman periods",
+          "answerId": "j11pdi",
+          "text": "<p>",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "92kxk",
-      "question": "What purpose did the pyramids serve in ancient Egyptian society?",
+      "questionId": "vdlgqb",
+      "question": "Which of these tags is used to insert a line break in HTML?",
       "answers": [
         {
-          "answerId": "k7hlkx",
-          "text": "Tombs for pharaohs and elite members",
+          "answerId": "s051yg",
+          "text": "<br>",
           "isCorrect": true
         },
         {
-          "answerId": "4ej3qg",
-          "text": "Military fortresses",
+          "answerId": "lfbn4",
+          "text": "<div>",
           "isCorrect": false
         },
         {
-          "answerId": "mtvsp5",
-          "text": "Trade centers",
+          "answerId": "0eaavr",
+          "text": "<span>",
           "isCorrect": false
         },
         {
-          "answerId": "q4rn9x",
-          "text": "Agricultural storage",
+          "answerId": "2airs",
+          "text": "<lb>",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "6vn7rj",
-      "question": "What do the pyramids reflect about ancient Egyptian civilization?",
+      "questionId": "cod6or",
+      "question": "Which attribute is used in HTML to specify an image's source URL?",
       "answers": [
         {
-          "answerId": "qa6iao",
-          "text": "Religious beliefs and engineering capabilities",
+          "answerId": "vawobp",
+          "text": "src",
           "isCorrect": true
         },
         {
-          "answerId": "u2h9c",
-          "text": "Fashion and clothing styles",
+          "answerId": "rsec19",
+          "text": "href",
           "isCorrect": false
         },
         {
-          "answerId": "ly6qv",
-          "text": "Musical traditions",
+          "answerId": "m4th7",
+          "text": "alt",
           "isCorrect": false
         },
         {
-          "answerId": "ibendj",
-          "text": "Political rivalries",
+          "answerId": "b0f7rt",
+          "text": "link",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "1w0qmb",
-      "question": "How long ago were the pyramids of Egypt constructed?",
+      "questionId": "e3upzj",
+      "question": "What is the correct HTML element for the largest heading?",
       "answers": [
         {
-          "answerId": "mif7xi",
-          "text": "Over 4,500 years ago",
+          "answerId": "w3sm78",
+          "text": "<h1>",
           "isCorrect": true
         },
         {
-          "answerId": "jrutii",
-          "text": "2,000 years ago",
+          "answerId": "5npjbd",
+          "text": "<h6>",
           "isCorrect": false
         },
         {
-          "answerId": "y00gd8",
-          "text": "1,000 years ago",
+          "answerId": "yau4am",
+          "text": "<h3>",
           "isCorrect": false
         },
         {
-          "answerId": "6m6303",
-          "text": "750 years ago",
+          "answerId": "wn17jz",
+          "text": "<heading>",
           "isCorrect": false
         }
       ]

@@ -65,6 +65,16 @@ export default {
           fontWeight: '500',
           lineHeight: '150%',
         },
+
+        '.text-sm-bold': {
+          fontSize: '0.875rem',
+          fontWeight: '700',
+        },
+
+        '.text-xs-medium': {
+          fontSize: '0.75rem',
+          fontWeight: '500',
+        },
       });
     }),
   ],
