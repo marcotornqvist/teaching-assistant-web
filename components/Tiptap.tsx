@@ -3,6 +3,7 @@
 import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Heading from '@tiptap/extension-heading';
+import Paragraph from '@tiptap/extension-paragraph';
 import ToolBar from './Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
 import { cn } from 'lib/utils';
@@ -30,6 +31,11 @@ const Tiptap = ({
           },
         },
       }),
+      Paragraph.configure({
+        HTMLAttributes: {
+          class: 'text-base',
+        },
+      }),
       Heading.extend({
         levels: [1, 2],
         renderHTML({ node, HTMLAttributes }) {
@@ -37,7 +43,7 @@ const Tiptap = ({
             ? node.attrs.level
             : this.options.levels[0];
           const classes: { [index: number]: string } = {
-            1: 'text-2xl',
+            1: 'text-xl',
             2: 'text-xl',
           };
           return [
@@ -59,7 +65,7 @@ const Tiptap = ({
     editorProps: {
       attributes: {
         class: cn(
-          'p-4 focus:outline-none max-h-[500px] overflow-y-scroll',
+          'p-4 focus:outline-none h-[400px] lg:h-[300px] overflow-y-scroll',
           className,
         ),
       },
@@ -70,7 +76,7 @@ const Tiptap = ({
   });
 
   return (
-    <div className='border-grey focus-within:border-green flex flex-col justify-stretch rounded-md border bg-black'>
+    <div className='flex w-full flex-col justify-stretch rounded-md border border-grey bg-black focus-within:border-green hover:border-green'>
       <ToolBar editor={editor} />
       <EditorContent className='border-none outline-offset-4' editor={editor} />
     </div>

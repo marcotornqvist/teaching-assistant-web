@@ -14,7 +14,7 @@ const Main = ({
     <main
       className={cn(
         'flex flex-1',
-        variant === 'aside' ? '' : 'py-20',
+        variant === 'aside' ? 'flex-col lg:flex-row' : 'py-20',
         className,
       )}
     >

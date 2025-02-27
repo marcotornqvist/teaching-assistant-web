@@ -10,9 +10,12 @@ const AsideMenu = ({
 }) => {
   return (
     <aside
-      className={cn('min-w-75 hidden border-r px-6 py-8 lg:flex', className)}
+      className={cn(
+        'hidden h-[calc(100svh-4rem)] min-w-75 max-w-[300px] overflow-y-scroll border-r px-6 pt-8 lg:flex',
+        className,
+      )}
     >
-      {children}
+      <div className='h-full'>{children}</div>
     </aside>
   );
 };

@@ -4,6 +4,8 @@ import React from 'react';
 import { type Editor } from '@tiptap/react';
 import { Toggle } from './ui/Toggle';
 import {
+  ArrowLeftFromLine,
+  ArrowRightFromLine,
   Bold,
   Heading1,
   Heading2,
@@ -12,6 +14,7 @@ import {
   ListOrdered,
   StrikethroughIcon,
 } from 'lucide-react';
+import { Separator } from './ui/Separator';
 
 type Props = {
   editor: Editor | null;
@@ -23,7 +26,7 @@ const ToolBar = ({ editor }: Props) => {
   }
 
   return (
-    <div className='border-grey flex gap-3 border-b p-1'>
+    <div className='flex w-full items-center gap-4 overflow-x-scroll border-b border-grey px-2 py-1'>
       <Toggle
         pressed={editor.isActive('heading', { level: 1 })}
         onPressedChange={() =>
@@ -70,6 +73,21 @@ const ToolBar = ({ editor }: Props) => {
       >
         <ListOrdered className='h-4 w-4' />
       </Toggle>
+      <Separator orientation='vertical' className='h-6' />
+      <button
+        className='h-10 px-2 outline-green disabled:opacity-50'
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().undo()}
+      >
+        <ArrowLeftFromLine width={16} height={16} strokeWidth={1.5} />
+      </button>
+      <button
+        className='h-10 px-3 disabled:opacity-50'
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().redo()}
+      >
+        <ArrowRightFromLine width={16} height={16} strokeWidth={1.5} />
+      </button>
     </div>
   );
 };

@@ -1,44 +1,33 @@
 'use client';
 
+import CreateMaterialForm from './CreateMaterialForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from 'components/ui/Button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from 'components/ui/Form';
-import { Input } from 'components/ui/Input';
-import { ArrowRight } from 'lucide-react';
-import Tiptap from 'components/Tiptap';
+import { Paperclip, SendHorizontal, WandSparkles } from 'lucide-react';
+
+const INPUT_MAX_AMOUNT = 2000;
 
 const Page = () => {
   const formSchema = z.object({
-    title: z.string().min(3, {
-      message: 'Title must be at least 10 characters.',
+    text: z.string().max(INPUT_MAX_AMOUNT, {
+      message: `The text must not exceed ${INPUT_MAX_AMOUNT} characters`,
     }),
-    content: z
-      .string()
-      .min(1, {
-        message: 'Content is required.',
-      })
-      .max(200000, {
-        message: 'Content must be less than 200,000 characters.',
-      })
-      .trim(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
     defaultValues: {
-      title: 'The Ancient Pyramids of Egypt',
-      content: `<p>The pyramids of Egypt are among the most iconic and enduring symbols of human civilization. Constructed over 4,500 years ago during the Old and Middle Kingdom periods, these monumental structures continue to captivate the imagination of scholars, travelers, and history enthusiasts alike. The pyramids were built as grand tombs for pharaohs and elite members of ancient Egyptian society, reflecting the civilization's profound religious beliefs and advanced engineering capabilities.</p><p></p><h2 class="text-xl font-bold">Historical Context</h2><p>The most famous pyramids were constructed during Egypt's Old Kingdom, often referred to as the "Age of the Pyramids" (circa 2686–2181 BCE). This era saw the emergence of a strong centralized state and the development of a highly organized workforce capable of undertaking such massive construction projects. The earliest known pyramid is the Step Pyramid of Djoser at Saqqara, designed by the architect Imhotep around 2670 BCE. This structure marked a significant departure from earlier mastaba tombs and laid the foundation for the later true pyramids.</p><p>The pinnacle of pyramid construction occurred during the Fourth Dynasty (circa 2613–2494 BCE), particularly under the reigns of Pharaohs Sneferu, Khufu, Khafre, and Menkaure. The Great Pyramid of Giza, built for Khufu (also known as Cheops), is the largest and most famous of all. It originally stood at 146.6 meters (481 feet) and was constructed using over two million limestone and granite blocks, each weighing several tons.</p><p></p><h2 class="text-xl font-bold">Design and Construction</h2><p>The construction of the pyramids remains a subject of fascination and debate. Ancient Egyptian builders employed a combination of skilled labor, precise planning, and ingenious techniques. Workers likely used ramps, sledges, and levers to transport and position the massive stones. The alignment of the pyramids is astonishingly precise, with the Great Pyramid aligned almost perfectly with the cardinal points of the compass.</p><p>The internal structure of the pyramids includes narrow passageways, chambers, and shafts. The king’s chamber, usually located at the heart of the pyramid, often contained a sarcophagus and grave goods intended to accompany the pharaoh into the afterlife. The intricate planning and execution of these designs demonstrate the advanced understanding of mathematics and engineering possessed by the ancient Egyptians.</p><p></p><h2 class="text-xl font-bold">Religious and Cultural Significance</h2><p>The pyramids were more than just tombs; they were profound expressions of Egyptian religious beliefs. Ancient Egyptians viewed the pharaoh as a divine intermediary between the gods and humanity. Upon death, the pharaoh was believed to ascend to the afterlife and unite with the sun god Ra. The pyramid’s shape, with its sloping sides, symbolized the rays of the sun and served as a staircase for the pharaoh’s journey to the heavens.</p><p>The construction of a pyramid was a colossal undertaking that required the mobilization of resources and labor on an unprecedented scale. Recent discoveries suggest that the workforce was composed of skilled laborers and seasonal workers rather than slaves, as previously thought. These workers were housed in nearby communities and provided with food, medical care, and tools, underscoring the complexity of ancient Egyptian society.`,
+      text: '',
     },
   });
 
@@ -49,7 +38,7 @@ const Page = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: values.content }),
+        body: JSON.stringify({ content: values.text }),
       });
 
       if (!response.ok) {
@@ -64,44 +53,59 @@ const Page = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-        <FormField
-          control={form.control}
-          name='title'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder='Type the title for the material here...'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='content'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Content</FormLabel>
-              <FormControl className='min-h-[400px]'>
-                <Tiptap content={field.value} onChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className='flex w-full justify-end'>
-          <Button type='submit' size='iconRight'>
-            Preview Material <ArrowRight width={20} height={20} />
-          </Button>
-        </div>
-      </form>
-    </Form>
+    <div className='pb-12'>
+      <CreateMaterialForm />
+      <div className='mt-24 flex w-full rounded-md bg-black p-4'>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='flex w-full flex-1 flex-col'
+          >
+            <FormField
+              control={form.control}
+              name='text'
+              render={({ field }) => (
+                <FormItem className='flex flex-1 items-start gap-4 space-y-0'>
+                  <div className='h-5 w-5 flex-shrink-0 pt-0.5' aria-hidden>
+                    <WandSparkles
+                      strokeWidth={1.5}
+                      width={20}
+                      height={20}
+                      className='text-grey'
+                    />
+                  </div>
+                  <FormControl>
+                    <textarea
+                      className='!mt-0 min-h-[200px] w-full resize-none bg-black text-sm leading-[150%] text-white outline-none placeholder:text-grey'
+                      placeholder='Tell the AI what to make...'
+                      maxLength={INPUT_MAX_AMOUNT}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className='mt-4 flex items-center justify-between'>
+              <button className='flex h-10 w-10 items-center justify-center rounded-md border border-dark-grey transition-colors hover:border-green hover:text-green focus-visible:border-green focus-visible:outline-none'>
+                <Paperclip strokeWidth={1.5} width={20} height={20} />
+              </button>
+              <div className='flex flex-row items-center gap-4 lg:gap-6'>
+                <span className='text-xs text-grey lg:text-sm'>
+                  {form.watch('text')?.length || 0}/{INPUT_MAX_AMOUNT}
+                </span>
+                <button
+                  type='submit'
+                  className='flex h-10 w-10 items-center justify-center rounded-md bg-dark-grey transition-colors hover:bg-green focus-visible:bg-green focus-visible:outline-none'
+                >
+                  <SendHorizontal strokeWidth={1.5} width={20} height={20} />
+                </button>
+              </div>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 };
 

@@ -1,133 +1,133 @@
 {
-  "title": "General Knowledge Quiz",
-  "content": "<p></p>",
+  "title": "Introduction to Lorem Ipsum",
+  "content": "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum",
   "questions": [
     {
-      "questionId": "5avft",
-      "question": "Which part of an HTML document contains the meta-information about the document?",
+      "questionId": "rag2x",
+      "question": "What is the primary use of 'lorem ipsum'?",
       "answers": [
         {
-          "answerId": "oxur29",
-          "text": "<head>",
+          "answerId": "osy66",
+          "text": "To serve as placeholder text in design.",
           "isCorrect": true
         },
         {
-          "answerId": "2ng47",
-          "text": "<body>",
+          "answerId": "vssu7o",
+          "text": "To provide meaningful content for websites.",
           "isCorrect": false
         },
         {
-          "answerId": "h205y",
-          "text": "<footer>",
+          "answerId": "8zpk8c",
+          "text": "To translate text into Latin.",
           "isCorrect": false
         },
         {
-          "answerId": "bac3nj",
-          "text": "<header>",
+          "answerId": "8ku0qj",
+          "text": "To enhance readability of documents.",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "cjdtn",
-      "question": "What tag in HTML is used to create a hyperlink?",
+      "questionId": "qk9re9",
+      "question": "Where does 'lorem ipsum' originate from?",
       "answers": [
         {
-          "answerId": "wd1r9",
-          "text": "<a>",
+          "answerId": "lpx193e",
+          "text": "A scrambled section of 'De Finibus Bonorum et Malorum' by Cicero.",
           "isCorrect": true
         },
         {
-          "answerId": "1qcqk",
-          "text": "<link>",
+          "answerId": "a3ix6r",
+          "text": "A random set of Latin words created by designers.",
           "isCorrect": false
         },
         {
-          "answerId": "4ws7sp",
-          "text": "<h>",
+          "answerId": "jm6qb6",
+          "text": "A famous poem from Ancient Rome.",
           "isCorrect": false
         },
         {
-          "answerId": "j11pdi",
-          "text": "<p>",
+          "answerId": "ywl9ge",
+          "text": "A traditional Latin saying.",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "vdlgqb",
-      "question": "Which of these tags is used to insert a line break in HTML?",
+      "questionId": "frrh68",
+      "question": "Which part of the text is often used in 'lorem ipsum' filler?",
       "answers": [
         {
-          "answerId": "s051yg",
-          "text": "<br>",
+          "answerId": "d65hpn",
+          "text": "The beginning sections of Cicero's writings.",
+          "isCorrect": false
+        },
+        {
+          "answerId": "qycaw8i",
+          "text": "Words from a middle section of 'De Finibus Bonorum et Malorum'.",
           "isCorrect": true
         },
         {
-          "answerId": "lfbn4",
-          "text": "<div>",
+          "answerId": "zyx06i",
+          "text": "Random text from any Roman text.",
           "isCorrect": false
         },
         {
-          "answerId": "0eaavr",
-          "text": "<span>",
-          "isCorrect": false
-        },
-        {
-          "answerId": "2airs",
-          "text": "<lb>",
+          "answerId": "rvf6kt",
+          "text": "Endnotes of famous historical Latin texts.",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "cod6or",
-      "question": "Which attribute is used in HTML to specify an image's source URL?",
+      "questionId": "lysqp7",
+      "question": "How long has 'lorem ipsum' been used as placeholder text?",
       "answers": [
         {
-          "answerId": "vawobp",
-          "text": "src",
+          "answerId": "ij7qu",
+          "text": "Since the 20th century",
+          "isCorrect": false
+        },
+        {
+          "answerId": "xunwzj",
+          "text": "Since the 16th century",
           "isCorrect": true
         },
         {
-          "answerId": "rsec19",
-          "text": "href",
+          "answerId": "8o9qyc",
+          "text": "Since the 17th century",
           "isCorrect": false
         },
         {
-          "answerId": "m4th7",
-          "text": "alt",
-          "isCorrect": false
-        },
-        {
-          "answerId": "b0f7rt",
-          "text": "link",
+          "answerId": "7e0alb",
+          "text": "Since the 21st century",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "e3upzj",
-      "question": "What is the correct HTML element for the largest heading?",
+      "questionId": "2ydikl",
+      "question": "Why is 'lorem ipsum' beneficial in design?",
       "answers": [
         {
-          "answerId": "w3sm78",
-          "text": "<h1>",
+          "answerId": "k6501",
+          "text": "It prevents readers from being distracted by the content.",
           "isCorrect": true
         },
         {
-          "answerId": "5npjbd",
-          "text": "<h6>",
+          "answerId": "bke16",
+          "text": "It provides accurate translations.",
           "isCorrect": false
         },
         {
-          "answerId": "yau4am",
-          "text": "<h3>",
+          "answerId": "2cacha",
+          "text": "It enhances the color scheme.",
           "isCorrect": false
         },
         {
-          "answerId": "wn17jz",
-          "text": "<heading>",
+          "answerId": "9ic6ap",
+          "text": "It guides the alignment of images.",
           "isCorrect": false
         }
       ]

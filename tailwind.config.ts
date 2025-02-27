@@ -30,6 +30,9 @@ export default {
       minWidth: {
         75: '18.75rem',
       },
+      maxWidth: {
+        75: '18.75rem',
+      },
     },
   },
   plugins: [
@@ -56,6 +59,16 @@ export default {
 
         '.text-base-medium': {
           fontSize: '1rem',
+          fontWeight: '500',
+          lineHeight: '150%',
+        },
+
+        '.text-base': {
+          fontSize: '1rem',
+        },
+
+        '.text-sm': {
+          fontSize: '0.875rem',
           fontWeight: '500',
           lineHeight: '150%',
         },
