@@ -95,7 +95,7 @@ const CreateMaterialForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Content</FormLabel>
-              <FormControl className='h–[550px] w-full lg:h-[400px]'>
+              <FormControl className='h-[550px] w-full lg:h-[400px]'>
                 <Tiptap content={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />

@@ -35,6 +35,32 @@ const HeaderToolbar = ({ className }: { className?: string }) => {
   );
 };
 
+type LinkType = { text: string; link: string };
+
+const List = ({
+  title,
+  items,
+  className,
+}: {
+  title: string;
+  items: LinkType[];
+  className?: string;
+}) => {
+  return (
+    <div className={cn('flex flex-col gap-6', className)}>
+      {title ? <h3 className='text-base-bold'>{title}</h3> : null}
+      <ol className='flex h-full list-decimal flex-col gap-4 pl-4'>
+        {items.map((item, index) => (
+          <li className='text-sm-medium' key={index}>
+            <Link href={item.link}>{item.text}</Link>
+          </li>
+        ))}
+        <div className='pb-12' />
+      </ol>
+    </div>
+  );
+};
+
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className='flex max-h-screen flex-col overflow-hidden'>
@@ -43,13 +69,25 @@ const Layout = ({ children }: { children: ReactNode }) => {
       </Header>
       <Main variant='aside'>
         <AsideMenu>
-          <ul className='h-full'>
-            <li>Lorem</li>
-            {[...Array(4)].map((_, index) => (
-              <li key={index}>Lorem</li>
-            ))}
-            <div className='pb-12' />
-          </ul>
+          <List
+            title='Module Materials'
+            items={[
+              {
+                text: 'The Ancient Pyramids of Egypt loremasdfioasdfjoasf',
+                link: '/materials/1',
+              },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/2' },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/3' },
+            ]}
+          />
+          <List
+            title='Module Materials'
+            items={[
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/1' },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/2' },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/3' },
+            ]}
+          />
         </AsideMenu>
         <section className='flex h-[calc(100svh-4rem)] w-full overflow-y-scroll'>
           <div className='w-full flex-1 lg:flex lg:justify-center'>

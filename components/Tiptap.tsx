@@ -33,7 +33,7 @@ const Tiptap = ({
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: 'text-base',
+          class: 'text-sm',
         },
       }),
       Heading.extend({
@@ -43,7 +43,7 @@ const Tiptap = ({
             ? node.attrs.level
             : this.options.levels[0];
           const classes: { [index: number]: string } = {
-            1: 'text-xl',
+            1: 'text-2xl',
             2: 'text-xl',
           };
           return [

@@ -57,6 +57,12 @@ export default {
           lineHeight: '150%',
         },
 
+        '.text-base-bold': {
+          fontSize: '1rem',
+          fontWeight: '700',
+          lineHeight: '150%',
+        },
+
         '.text-base-medium': {
           fontSize: '1rem',
           fontWeight: '500',
@@ -65,12 +71,13 @@ export default {
 
         '.text-base': {
           fontSize: '1rem',
+          fontWeight: '400',
         },
 
         '.text-sm': {
           fontSize: '0.875rem',
-          fontWeight: '500',
-          lineHeight: '150%',
+          fontWeight: '400',
+          lineHeight: '150% !important',
         },
 
         '.text-sm-medium': {
