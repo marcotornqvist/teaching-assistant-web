@@ -17,30 +17,30 @@ import { Input } from 'components/ui/Input';
 import { ArrowRight } from 'lucide-react';
 import Tiptap from 'components/Tiptap';
 
-const CreateMaterialForm = () => {
-  const formSchema = z.object({
-    title: z
-      .string()
-      .min(3, {
-        message: 'Title must be at least 3 characters.',
-      })
-      .max(200, {
-        message: 'Title must be less than 200 characters.',
-      }),
-    content: z
-      .string()
-      .min(1, {
-        message: 'Content is required.',
-      })
-      .max(200000, {
-        message: 'Content must be less than 200,000 characters.',
-      })
-      .trim(),
-  });
+export const createMaterialFormSchema = z.object({
+  title: z
+    .string()
+    .min(3, {
+      message: 'Title must be at least 3 characters.',
+    })
+    .max(200, {
+      message: 'Title must be less than 200 characters.',
+    }),
+  content: z
+    .string()
+    .min(50, {
+      message: 'Content must be at least 50 characters.',
+    })
+    .max(200000, {
+      message: 'Content must be less than 200,000 characters.',
+    }),
+});
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    mode: 'onSubmit',
+const CreateMaterialForm = () => {
+  const form = useForm<z.infer<typeof createMaterialFormSchema>>({
+    resolver: zodResolver(createMaterialFormSchema),
+    mode: 'onSubmit', // This controls when validation errors are shown
+    reValidateMode: 'onChange', // This will revalidate when user makes changes
     defaultValues: {
       title: '',
       content: '',
@@ -49,9 +49,12 @@ const CreateMaterialForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // Destructure isValid from formState
+  const { isValid, isDirty, isSubmitting } = form.formState;
+
+  const onSubmit = async (values: z.infer<typeof createMaterialFormSchema>) => {
     try {
-      const response = await fetch('/tasks/create/api', {
+      const response = await fetch('/api/materials/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,15 +99,24 @@ const CreateMaterialForm = () => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl className='h-[550px] w-full lg:h-[400px]'>
-                <Tiptap content={field.value} onChange={field.onChange} />
+                <Tiptap
+                  placeholder='Type the content for the material here...'
+                  content={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className='flex w-full justify-end'>
-          <Button type='submit' size='iconRight'>
-            Preview Material <ArrowRight width={20} height={20} />
+          <Button
+            type='submit'
+            size='iconRight'
+            disabled={!isValid || !isDirty || isSubmitting}
+            loading={isSubmitting}
+          >
+            Submit Material <ArrowRight width={20} height={20} />
           </Button>
         </div>
       </form>

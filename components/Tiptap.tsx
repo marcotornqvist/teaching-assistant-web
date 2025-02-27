@@ -9,10 +9,12 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { cn } from 'lib/utils';
 
 const Tiptap = ({
+  placeholder,
   content,
   onChange,
   className,
 }: {
+  placeholder?: string;
   content: string;
   onChange: (richText: string) => void;
   className?: string;
@@ -56,8 +58,9 @@ const Tiptap = ({
         },
       }).configure({ levels: [1, 2] }),
       Placeholder.configure({
-        placeholder: "Write your article! You're the journalist.",
-        showOnlyWhenEditable: false,
+        placeholder,
+        emptyNodeClass:
+          'first:before:text-grey first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
       }),
     ],
     immediatelyRender: false,

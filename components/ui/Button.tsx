@@ -4,12 +4,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'lib/utils';
 
 const buttonVariants = cva(
-  '!text-xs-medium border whitespace-nowrap border-grey flex items-center gap-4 h-10 rounded-md text-light-grey -outline-offset-1',
+  '!text-xs-medium border whitespace-nowrap border-grey flex items-center gap-4 h-10 rounded-md text-light-grey -outline-offset-1 ',
   {
     variants: {
       variant: {
         default:
-          'hover:border-green bg-black focus-visible:text-green hover:text-green focus-visible:outline outline-green',
+          'hover:enabled:border-green bg-black focus-visible:enabled:text-green hover:enabled:text-green focus-visible:outline outline-green',
         destructive:
           'hover:border-red bg-black focus-visible:text-red hover:text-red focus-visible:outline outline-red',
       },
@@ -18,11 +18,23 @@ const buttonVariants = cva(
         iconRight: 'pr-4 pl-5',
         iconLeft: 'pl-4 pr-5',
       },
+      loading: {
+        true: 'opacity-100',
+        false: 'disabled:opacity-50',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      loading: false,
     },
+    compoundVariants: [
+      {
+        loading: true,
+        variant: 'default',
+        className: 'border-green text-green',
+      },
+    ],
   },
 );
 
@@ -36,6 +48,7 @@ const Button = ({
   className,
   variant,
   size,
+  loading,
   asChild = false,
   ref,
   ...props
@@ -43,7 +56,7 @@ const Button = ({
   const Comp = asChild ? Slot : 'button';
   return (
     <Comp
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, loading, className }))}
       ref={ref}
       {...props}
     />

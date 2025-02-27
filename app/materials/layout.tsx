@@ -27,10 +27,6 @@ const HeaderToolbar = ({ className }: { className?: string }) => {
         Delete Material
         <Trash2 strokeWidth={1.5} width={16} height={16} />
       </Button>
-      <Button variant='destructive' size='iconRight'>
-        Delete Material
-        <Trash2 strokeWidth={1.5} width={16} height={16} />
-      </Button>
     </div>
   );
 };
@@ -70,8 +66,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <Main variant='aside'>
         <AsideMenu>
           <List
-            title='Module Materials'
+            title='Modules'
             items={[
+              {
+                text: 'The Ancient Pyramids of Egypt loremasdfioasdfjoasf',
+                link: '/materials/1',
+              },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/2' },
+              { text: 'The Ancient Pyramids of Egypt', link: '/materials/3' },
               {
                 text: 'The Ancient Pyramids of Egypt loremasdfioasdfjoasf',
                 link: '/materials/1',

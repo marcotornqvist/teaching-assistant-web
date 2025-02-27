@@ -11,7 +11,7 @@ const AsideMenu = ({
   return (
     <aside
       className={cn(
-        'hidden h-[calc(100svh-4rem)] min-w-75 max-w-[300px] overflow-y-scroll border-r px-6 pt-8 lg:flex',
+        'hidden h-[calc(100svh-4rem)] min-w-75 max-w-[300px] overflow-y-scroll border-r px-6 pt-12 lg:flex',
         className,
       )}
     >

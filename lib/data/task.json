@@ -1,133 +1,133 @@
 {
-  "title": "Introduction to Lorem Ipsum",
-  "content": "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum",
+  "title": "General Knowledge Quiz",
+  "content": "<p class=\"text-sm\">awefawefawefawefawefawefawefawefawefawefawef</p>",
   "questions": [
     {
-      "questionId": "rag2x",
-      "question": "What is the primary use of 'lorem ipsum'?",
+      "questionId": "yfbxv",
+      "question": "What is the primary purpose of quiz builder applications?",
       "answers": [
         {
-          "answerId": "osy66",
-          "text": "To serve as placeholder text in design.",
+          "answerId": "3x7mq",
+          "text": "To create interactive forms",
+          "isCorrect": false
+        },
+        {
+          "answerId": "i1c9p8",
+          "text": "To develop websites",
+          "isCorrect": false
+        },
+        {
+          "answerId": "sb3mdr",
+          "text": "To generate digital quizzes and tests",
           "isCorrect": true
         },
         {
-          "answerId": "vssu7o",
-          "text": "To provide meaningful content for websites.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "8zpk8c",
-          "text": "To translate text into Latin.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "8ku0qj",
-          "text": "To enhance readability of documents.",
+          "answerId": "uwh5bj",
+          "text": "To manage databases",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "qk9re9",
-      "question": "Where does 'lorem ipsum' originate from?",
+      "questionId": "xzy4y",
+      "question": "How does a quiz builder usually present multiple choice questions?",
       "answers": [
         {
-          "answerId": "lpx193e",
-          "text": "A scrambled section of 'De Finibus Bonorum et Malorum' by Cicero.",
+          "answerId": "g86fuf",
+          "text": "In essay format",
+          "isCorrect": false
+        },
+        {
+          "answerId": "ezqz23",
+          "text": "As open-ended questions",
+          "isCorrect": false
+        },
+        {
+          "answerId": "24v6ro",
+          "text": "With a list of options for selection",
           "isCorrect": true
         },
         {
-          "answerId": "a3ix6r",
-          "text": "A random set of Latin words created by designers.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "jm6qb6",
-          "text": "A famous poem from Ancient Rome.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "ywl9ge",
-          "text": "A traditional Latin saying.",
+          "answerId": "j0gro8n",
+          "text": "Through fill-in-the-blank fields",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "frrh68",
-      "question": "Which part of the text is often used in 'lorem ipsum' filler?",
+      "questionId": "ej854",
+      "question": "What type of content does a quiz builder typically ignore when creating questions?",
       "answers": [
         {
-          "answerId": "d65hpn",
-          "text": "The beginning sections of Cicero's writings.",
+          "answerId": "hcgdpn",
+          "text": "Text content",
           "isCorrect": false
         },
         {
-          "answerId": "qycaw8i",
-          "text": "Words from a middle section of 'De Finibus Bonorum et Malorum'.",
+          "answerId": "vimog",
+          "text": "Numerical data",
+          "isCorrect": false
+        },
+        {
+          "answerId": "6proi",
+          "text": "Structure tags such as HTML",
           "isCorrect": true
         },
         {
-          "answerId": "zyx06i",
-          "text": "Random text from any Roman text.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "rvf6kt",
-          "text": "Endnotes of famous historical Latin texts.",
+          "answerId": "jm3ej8",
+          "text": "Image files",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "lysqp7",
-      "question": "How long has 'lorem ipsum' been used as placeholder text?",
+      "questionId": "0604ln",
+      "question": "In multiple choice format, how many options are typically provided for each question?",
       "answers": [
         {
-          "answerId": "ij7qu",
-          "text": "Since the 20th century",
+          "answerId": "xzg4b",
+          "text": "One",
           "isCorrect": false
         },
         {
-          "answerId": "xunwzj",
-          "text": "Since the 16th century",
+          "answerId": "3fein",
+          "text": "Two",
+          "isCorrect": false
+        },
+        {
+          "answerId": "tioq",
+          "text": "Four",
           "isCorrect": true
         },
         {
-          "answerId": "8o9qyc",
-          "text": "Since the 17th century",
-          "isCorrect": false
-        },
-        {
-          "answerId": "7e0alb",
-          "text": "Since the 21st century",
+          "answerId": "0pwt3",
+          "text": "Ten",
           "isCorrect": false
         }
       ]
     },
     {
-      "questionId": "2ydikl",
-      "question": "Why is 'lorem ipsum' beneficial in design?",
+      "questionId": "i1xwvd",
+      "question": "What is an essential feature of a multiple choice answer?",
       "answers": [
         {
-          "answerId": "k6501",
-          "text": "It prevents readers from being distracted by the content.",
+          "answerId": "ceb3ux",
+          "text": "It should have more than 100 characters",
+          "isCorrect": false
+        },
+        {
+          "answerId": "bxewc",
+          "text": "It provides a list of possible correct or incorrect choices",
           "isCorrect": true
         },
         {
-          "answerId": "bke16",
-          "text": "It provides accurate translations.",
+          "answerId": "579yos",
+          "text": "It is always mathematical",
           "isCorrect": false
         },
         {
-          "answerId": "2cacha",
-          "text": "It enhances the color scheme.",
-          "isCorrect": false
-        },
-        {
-          "answerId": "9ic6ap",
-          "text": "It guides the alignment of images.",
+          "answerId": "f3h3s",
+          "text": "It must be presented in bullet points",
           "isCorrect": false
         }
       ]
