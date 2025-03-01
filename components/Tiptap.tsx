@@ -7,18 +7,23 @@ import Paragraph from '@tiptap/extension-paragraph';
 import ToolBar from './Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
 import { cn } from 'lib/utils';
+import { useEffect, useState } from 'react';
 
 const Tiptap = ({
   placeholder,
   content,
+  streamedContent,
   onChange,
   className,
 }: {
   placeholder?: string;
   content: string;
+  streamedContent?: string;
   onChange: (richText: string) => void;
   className?: string;
 }) => {
+  const [editorHasLoaded, setEditorHasLoaded] = useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -68,7 +73,7 @@ const Tiptap = ({
     editorProps: {
       attributes: {
         class: cn(
-          'p-4 focus:outline-none h-[400px] lg:h-[300px] overflow-y-scroll',
+          'p-4 focus:outline-none min-h-full overflow-y-scroll',
           className,
         ),
       },
@@ -78,10 +83,19 @@ const Tiptap = ({
     },
   });
 
+  useEffect(() => {
+    if (editor && streamedContent) {
+      editor?.commands.setContent(streamedContent);
+    }
+  }, [streamedContent]);
+
   return (
-    <div className='flex w-full flex-col justify-stretch rounded-md border border-grey bg-black focus-within:border-green hover:border-green'>
+    <div className='flex h-96 min-h-full w-full flex-col justify-stretch rounded-md border border-grey bg-black focus-within:border-green hover:border-green'>
       <ToolBar editor={editor} />
-      <EditorContent className='border-none outline-offset-4' editor={editor} />
+      <EditorContent
+        className='h-full overflow-hidden border-none outline-offset-4'
+        editor={editor}
+      />
     </div>
   );
 };

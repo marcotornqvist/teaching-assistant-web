@@ -5,36 +5,31 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Form, FormControl, FormField, FormItem } from 'components/ui/Form';
-import { Paperclip, SendHorizontal, WandSparkles } from 'lucide-react';
+import { Loader, Paperclip, SendHorizontal, WandSparkles } from 'lucide-react';
 import { cn } from 'lib/utils';
-
-const INPUT_MAX_LENGTH = 2000;
-
-export const chatboxFormSchema = z.object({
-  text: z
-    .string()
-    .nonempty()
-    .max(INPUT_MAX_LENGTH, {
-      message: `The text must not exceed ${INPUT_MAX_LENGTH} characters`,
-    }),
-});
+import { ChatboxFormSchema } from 'lib/schema';
+import { CHATBOX_INPUT_MAX_LENGTH } from 'lib/constants';
 
 const ChatBox = ({
   onSubmit,
   className,
+  isLoading,
 }: {
-  onSubmit: (data: z.infer<typeof chatboxFormSchema>) => void;
+  onSubmit: (data: z.infer<typeof ChatboxFormSchema>) => void;
   className?: string;
+  isLoading: boolean;
 }) => {
-  const form = useForm<z.infer<typeof chatboxFormSchema>>({
-    resolver: zodResolver(chatboxFormSchema),
+  const form = useForm<z.infer<typeof ChatboxFormSchema>>({
+    resolver: zodResolver(ChatboxFormSchema),
     mode: 'onSubmit',
+    reValidateMode: 'onChange',
     defaultValues: {
-      text: '',
+      text: 'Create me a text on the egyptian pyramids.',
+      generateType: 'content',
     },
   });
 
-  const { isValid, isDirty, isSubmitting } = form.formState;
+  const { isValid, isSubmitting } = form.formState;
 
   return (
     <div className={cn('mt-24 flex w-full rounded-md bg-black p-4', className)}>
@@ -58,9 +53,9 @@ const ChatBox = ({
                 </div>
                 <FormControl>
                   <textarea
-                    className='!mt-0 min-h-[200px] w-full resize-none bg-black text-sm leading-[150%] text-white outline-none placeholder:text-grey'
+                    className='text-sm !mt-0 min-h-[200px] w-full resize-none bg-black leading-[150%] text-white outline-none placeholder:text-grey'
                     placeholder='Tell the AI what to make...'
-                    maxLength={INPUT_MAX_LENGTH}
+                    maxLength={CHATBOX_INPUT_MAX_LENGTH}
                     {...field}
                   />
                 </FormControl>
@@ -73,7 +68,7 @@ const ChatBox = ({
             </button>
             <div className='flex flex-row items-center gap-4 lg:gap-6'>
               <span className='text-xs text-grey lg:text-sm'>
-                {form.watch('text')?.length || 0}/{INPUT_MAX_LENGTH}
+                {form.watch('text')?.length || 0}/{CHATBOX_INPUT_MAX_LENGTH}
               </span>
               <button
                 type='submit'
@@ -81,9 +76,13 @@ const ChatBox = ({
                   'flex h-10 w-10 items-center justify-center rounded-md bg-dark-grey transition-colors focus-visible:outline-none hover:enabled:bg-green focus-visible:enabled:bg-green',
                   isSubmitting ? 'disabled:bg-green' : 'disabled:opacity-50',
                 )}
-                disabled={!isValid || !isDirty || isSubmitting}
+                disabled={!isValid || isSubmitting || isLoading}
               >
-                <SendHorizontal strokeWidth={1.5} width={20} height={20} />
+                {isLoading ? (
+                  <Loader strokeWidth={1.5} className='animate-spin' />
+                ) : (
+                  <SendHorizontal strokeWidth={1.5} width={20} height={20} />
+                )}
               </button>
             </div>
           </div>

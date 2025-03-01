@@ -1,0 +1,2 @@
+export const CHATBOX_INPUT_MAX_LENGTH = 2000;
+5

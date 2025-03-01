@@ -16,43 +16,36 @@ import {
 import { Input } from 'components/ui/Input';
 import { ArrowRight } from 'lucide-react';
 import Tiptap from 'components/Tiptap';
+import { CreateMaterialFormSchema } from 'lib/schema';
+import { useEffect } from 'react';
 
-export const createMaterialFormSchema = z.object({
-  title: z
-    .string()
-    .min(3, {
-      message: 'Title must be at least 3 characters.',
-    })
-    .max(200, {
-      message: 'Title must be less than 200 characters.',
-    }),
-  content: z
-    .string()
-    .min(50, {
-      message: 'Content must be at least 50 characters.',
-    })
-    .max(200000, {
-      message: 'Content must be less than 200,000 characters.',
-    }),
-});
-
-const CreateMaterialForm = () => {
-  const form = useForm<z.infer<typeof createMaterialFormSchema>>({
-    resolver: zodResolver(createMaterialFormSchema),
+const CreateMaterialForm = ({
+  streamedTitle,
+  streamedContent,
+}: {
+  streamedTitle?: string;
+  streamedContent?: string;
+}) => {
+  const form = useForm<z.infer<typeof CreateMaterialFormSchema>>({
+    resolver: zodResolver(CreateMaterialFormSchema),
     mode: 'onSubmit', // This controls when validation errors are shown
     reValidateMode: 'onChange', // This will revalidate when user makes changes
     defaultValues: {
       title: '',
       content: '',
-      // title: 'The Ancient Pyramids of Egypt',
-      // content: `<p>The pyramids of Egypt are among the most iconic and enduring symbols of human civilization. Constructed over 4,500 years ago during the Old and Middle Kingdom periods, these monumental structures continue to captivate the imagination of scholars, travelers, and history enthusiasts alike. The pyramids were built as grand tombs for pharaohs and elite members of ancient Egyptian society, reflecting the civilization's profound religious beliefs and advanced engineering capabilities.</p><p></p><h2 class="text-xl font-bold">Historical Context</h2><p>The most famous pyramids were constructed during Egypt's Old Kingdom, often referred to as the "Age of the Pyramids" (circa 2686–2181 BCE). This era saw the emergence of a strong centralized state and the development of a highly organized workforce capable of undertaking such massive construction projects. The earliest known pyramid is the Step Pyramid of Djoser at Saqqara, designed by the architect Imhotep around 2670 BCE. This structure marked a significant departure from earlier mastaba tombs and laid the foundation for the later true pyramids.</p><p>The pinnacle of pyramid construction occurred during the Fourth Dynasty (circa 2613–2494 BCE), particularly under the reigns of Pharaohs Sneferu, Khufu, Khafre, and Menkaure. The Great Pyramid of Giza, built for Khufu (also known as Cheops), is the largest and most famous of all. It originally stood at 146.6 meters (481 feet) and was constructed using over two million limestone and granite blocks, each weighing several tons.</p><p></p><h2 class="text-xl font-bold">Design and Construction</h2><p>The construction of the pyramids remains a subject of fascination and debate. Ancient Egyptian builders employed a combination of skilled labor, precise planning, and ingenious techniques. Workers likely used ramps, sledges, and levers to transport and position the massive stones. The alignment of the pyramids is astonishingly precise, with the Great Pyramid aligned almost perfectly with the cardinal points of the compass.</p><p>The internal structure of the pyramids includes narrow passageways, chambers, and shafts. The king’s chamber, usually located at the heart of the pyramid, often contained a sarcophagus and grave goods intended to accompany the pharaoh into the afterlife. The intricate planning and execution of these designs demonstrate the advanced understanding of mathematics and engineering possessed by the ancient Egyptians.</p><p></p><h2 class="text-xl font-bold">Religious and Cultural Significance</h2><p>The pyramids were more than just tombs; they were profound expressions of Egyptian religious beliefs. Ancient Egyptians viewed the pharaoh as a divine intermediary between the gods and humanity. Upon death, the pharaoh was believed to ascend to the afterlife and unite with the sun god Ra. The pyramid’s shape, with its sloping sides, symbolized the rays of the sun and served as a staircase for the pharaoh’s journey to the heavens.</p><p>The construction of a pyramid was a colossal undertaking that required the mobilization of resources and labor on an unprecedented scale. Recent discoveries suggest that the workforce was composed of skilled laborers and seasonal workers rather than slaves, as previously thought. These workers were housed in nearby communities and provided with food, medical care, and tools, underscoring the complexity of ancient Egyptian society.`,
     },
   });
 
-  // Destructure isValid from formState
-  const { isValid, isDirty, isSubmitting } = form.formState;
+  useEffect(() => {
+    if (streamedTitle && streamedTitle !== form.getValues('title')) {
+      form.setValue('title', streamedTitle);
+    }
+  }, [streamedTitle, form]);
 
-  const onSubmit = async (values: z.infer<typeof createMaterialFormSchema>) => {
+  // Destructure isValid from formState
+  const { isValid, isSubmitting } = form.formState;
+
+  const onSubmit = async (values: z.infer<typeof CreateMaterialFormSchema>) => {
     try {
       const response = await fetch('/api/materials/create', {
         method: 'POST',
@@ -98,11 +91,12 @@ const CreateMaterialForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Content</FormLabel>
-              <FormControl className='h-[550px] w-full lg:h-[400px]'>
+              <FormControl className='h-96 w-full lg:h-80'>
                 <Tiptap
                   placeholder='Type the content for the material here...'
                   content={field.value}
                   onChange={field.onChange}
+                  streamedContent={streamedContent}
                 />
               </FormControl>
               <FormMessage />
@@ -113,7 +107,7 @@ const CreateMaterialForm = () => {
           <Button
             type='submit'
             size='iconRight'
-            disabled={!isValid || !isDirty || isSubmitting}
+            disabled={!isValid || isSubmitting}
             loading={isSubmitting}
           >
             Submit Material <ArrowRight width={20} height={20} />
