@@ -7,7 +7,8 @@ import Paragraph from '@tiptap/extension-paragraph';
 import ToolBar from './Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
 import { cn } from 'lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { Markdown } from 'tiptap-markdown';
 
 const Tiptap = ({
   placeholder,
@@ -22,10 +23,9 @@ const Tiptap = ({
   onChange: (richText: string) => void;
   className?: string;
 }) => {
-  const [editorHasLoaded, setEditorHasLoaded] = useState(false);
-
   const editor = useEditor({
     extensions: [
+      Markdown,
       StarterKit.configure({
         orderedList: {
           HTMLAttributes: {
@@ -85,7 +85,7 @@ const Tiptap = ({
 
   useEffect(() => {
     if (editor && streamedContent) {
-      editor?.commands.setContent(streamedContent);
+      editor?.commands?.setContent(streamedContent);
     }
   }, [streamedContent]);
 

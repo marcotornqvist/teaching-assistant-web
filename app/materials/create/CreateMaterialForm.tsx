@@ -19,6 +19,8 @@ import Tiptap from 'components/Tiptap';
 import { CreateMaterialFormSchema } from 'lib/schema';
 import { useEffect } from 'react';
 
+type CreateMaterialFormValues = z.infer<typeof CreateMaterialFormSchema>;
+
 const CreateMaterialForm = ({
   streamedTitle,
   streamedContent,
@@ -26,10 +28,10 @@ const CreateMaterialForm = ({
   streamedTitle?: string;
   streamedContent?: string;
 }) => {
-  const form = useForm<z.infer<typeof CreateMaterialFormSchema>>({
+  const form = useForm<CreateMaterialFormValues>({
     resolver: zodResolver(CreateMaterialFormSchema),
-    mode: 'onSubmit', // This controls when validation errors are shown
-    reValidateMode: 'onChange', // This will revalidate when user makes changes
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
     defaultValues: {
       title: '',
       content: '',
@@ -45,7 +47,7 @@ const CreateMaterialForm = ({
   // Destructure isValid from formState
   const { isValid, isSubmitting } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof CreateMaterialFormSchema>) => {
+  const onSubmit = async (values: CreateMaterialFormValues) => {
     try {
       const response = await fetch('/api/materials/create', {
         method: 'POST',

@@ -26,7 +26,7 @@ const ToolBar = ({ editor }: Props) => {
   }
 
   return (
-    <div className='flex h-12 w-full items-center gap-4 overflow-y-hidden overflow-x-scroll border-b border-grey px-2 py-1'>
+    <div className='flex min-h-12 w-full items-center gap-4 overflow-y-hidden overflow-x-scroll border-b border-grey px-2 py-1'>
       <Toggle
         pressed={editor.isActive('heading', { level: 1 })}
         onPressedChange={() =>

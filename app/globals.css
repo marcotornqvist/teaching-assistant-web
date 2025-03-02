@@ -20,4 +20,8 @@
   textarea::placeholder {
     @apply text-grey;
   }
+
+  select {
+    height: 0 !important;
+  }
 }
