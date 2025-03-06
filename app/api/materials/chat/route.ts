@@ -27,34 +27,35 @@ export const POST = async (req: Request) => {
   if (file?.data && model === GOOGLE_MODEL) {
     messages.push(
       {
-      role: 'system',
-      content:
-        'You are a teacher that is creating new materials for your students based on the prompt and PDF attachment that was given. Respond to the user with the user input language.',
-      },
-      {
-      role: 'user',
-      content: [
-        {
-        type: 'text',
-        text: `Based on the uploaded PDF file and the following text: "${text}", please create educational material with this format:
+        role: 'system',
+        content: `You are a teacher that is creating new materials for your students based on the prompt and PDF attachment that was given. Respond to the user with the user input language. Please create material with this format:
         1. Start with a clear, concise title
         2. Follow with well-organized content that explains the subject matter
         3. Use only plain text in your response (no markdown or formatting)`,
-        },
-        {
-        type: 'file',
-        data: file.data,
-        mimeType: 'application/pdf',
-        },
-      ],
+      },
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Based on the uploaded PDF file and the following text: "${text}"`,
+          },
+          {
+            type: 'file',
+            data: file.data,
+            mimeType: 'application/pdf',
+          },
+        ],
       },
     );
   } else {
     messages.push(
       {
         role: 'system',
-        content:
-          'You are a teacher that is creating new materials for your students based on the prompt that was given. Respond to the user with the user input language.',
+        content: `You are a teacher that is creating new materials for your students based on the prompt that was given. Respond to the user with the user input language. Please create material with this format:
+        1. Start with a clear, concise title
+        2. Follow with well-organized content that explains the subject matter
+        3. Use only plain text in your response (no markdown or formatting)`,
       },
       {
         role: 'user',

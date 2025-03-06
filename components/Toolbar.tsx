@@ -75,6 +75,7 @@ const ToolBar = ({ editor }: Props) => {
       </Toggle>
       <Separator orientation='vertical' className='h-6' />
       <button
+        type='button'
         className='h-10 px-2 outline-green disabled:opacity-50'
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().undo()}
@@ -82,6 +83,7 @@ const ToolBar = ({ editor }: Props) => {
         <ArrowLeftFromLine width={16} height={16} strokeWidth={1.5} />
       </button>
       <button
+        type='button'
         className='h-10 px-3 disabled:opacity-50'
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().redo()}

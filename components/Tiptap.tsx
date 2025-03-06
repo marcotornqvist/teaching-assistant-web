@@ -15,12 +15,14 @@ const Tiptap = ({
   content,
   streamedContent,
   onChange,
+  isValid,
   className,
 }: {
   placeholder?: string;
   content: string;
   streamedContent?: string;
   onChange: (richText: string) => void;
+  isValid?: boolean;
   className?: string;
 }) => {
   const editor = useEditor({
@@ -72,10 +74,7 @@ const Tiptap = ({
     content,
     editorProps: {
       attributes: {
-        class: cn(
-          'p-4 focus:outline-none min-h-full overflow-y-scroll',
-          className,
-        ),
+        class: cn('p-4 focus:outline-none h-full overflow-y-scroll', className),
       },
     },
     onUpdate({ editor }) {
@@ -90,7 +89,15 @@ const Tiptap = ({
   }, [streamedContent]);
 
   return (
-    <div className='flex h-96 min-h-full w-full flex-col justify-stretch rounded-md border border-grey bg-black focus-within:border-green hover:border-green'>
+    <div
+      className={cn(
+        'flex h-96 w-full flex-col justify-stretch rounded-md border border-grey bg-black focus-within:border-green hover:border-green',
+        {
+          'border-red hover:border-red focus-visible:outline-red': !isValid,
+        },
+        className,
+      )}
+    >
       <ToolBar editor={editor} />
       <EditorContent
         className='h-full overflow-hidden border-none outline-offset-4'

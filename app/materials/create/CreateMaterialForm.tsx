@@ -31,23 +31,19 @@ const CreateMaterialForm = ({
   const form = useForm<CreateMaterialFormValues>({
     resolver: zodResolver(CreateMaterialFormSchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
+    shouldUnregister: false,
     defaultValues: {
       title: '',
       content: '',
     },
   });
 
-  useEffect(() => {
-    if (streamedTitle && streamedTitle !== form.getValues('title')) {
-      form.setValue('title', streamedTitle);
-    }
-  }, [streamedTitle, form]);
-
   // Destructure isValid from formState
   const { isValid, isSubmitting } = form.formState;
 
   const onSubmit = async (values: CreateMaterialFormValues) => {
+    console.log('onSubmit called');
     try {
       const response = await fetch('/api/materials/create', {
         method: 'POST',
@@ -58,15 +54,33 @@ const CreateMaterialForm = ({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create task');
+        throw new Error('Failed to create material');
       }
 
       const data = await response.json();
       console.log(data);
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('Failed to create material', error);
     }
   };
+
+  useEffect(() => {
+    if (streamedTitle && streamedTitle !== form.getValues('title')) {
+      form.setValue('title', streamedTitle, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [streamedTitle, form]);
+
+  useEffect(() => {
+    if (streamedContent && streamedContent !== form.getValues('content')) {
+      form.setValue('content', streamedContent, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [streamedContent, form]);
 
   return (
     <Form {...form}>
@@ -93,12 +107,13 @@ const CreateMaterialForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Content</FormLabel>
-              <FormControl className='h-96 w-full lg:h-80'>
+              <FormControl>
                 <Tiptap
                   placeholder='Type the content for the material here...'
                   content={field.value}
                   onChange={field.onChange}
                   streamedContent={streamedContent}
+                  isValid={form.formState.errors.content === undefined}
                 />
               </FormControl>
               <FormMessage />
