@@ -27,7 +27,11 @@ const Tiptap = ({
 }) => {
   const editor = useEditor({
     extensions: [
-      Markdown,
+      Markdown.configure({
+        transformPastedText: true, // Allow to paste markdown text in the editor
+        transformCopiedText: true, // Copied text is transformed to markdown
+        breaks: true,
+      }),
       StarterKit.configure({
         orderedList: {
           HTMLAttributes: {
@@ -84,9 +88,16 @@ const Tiptap = ({
 
   useEffect(() => {
     if (editor && streamedContent) {
-      editor?.commands?.setContent(streamedContent);
+      // Clean up the content by removing extra whitespace
+      const cleanedContent = streamedContent
+        .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+        .replace(/\n\s*\n+/g, '\n\n') // Replace multiple newlines with just two
+        .trim(); // Remove leading/trailing whitespace
+
+      // Set the cleaned content
+      editor.commands.setContent(cleanedContent);
     }
-  }, [streamedContent]);
+  }, [streamedContent, editor]);
 
   return (
     <div

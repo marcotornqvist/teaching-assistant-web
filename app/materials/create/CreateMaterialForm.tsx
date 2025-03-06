@@ -43,7 +43,6 @@ const CreateMaterialForm = ({
   const { isValid, isSubmitting } = form.formState;
 
   const onSubmit = async (values: CreateMaterialFormValues) => {
-    console.log('onSubmit called');
     try {
       const response = await fetch('/api/materials/create', {
         method: 'POST',

@@ -16,21 +16,30 @@ const SelectTrigger = ({
   className,
   children,
   ref,
+  open,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
   ref?: React.Ref<HTMLButtonElement>;
+  open?: boolean;
 }) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'text-sm flex h-10 max-w-96 items-center justify-between gap-3 rounded-md border border-dark-grey px-3 py-2 text-left outline-none transition-colors focus-visible:border-green disabled:cursor-not-allowed [&>span]:line-clamp-1',
+      'group text-sm flex h-10 max-w-96 items-center justify-between gap-3 rounded-md border border-dark-grey px-3 py-2 text-left outline-none transition-colors hover:border-green hover:text-green focus-visible:border-green focus-visible:text-green disabled:cursor-not-allowed data-[state=open]:border-green data-[state=open]:text-green [&>span]:line-clamp-1',
       className,
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className='h-4 w-4 text-grey' />
+      <ChevronDown
+        className={cn(
+          'h-4 w-4 text-grey group-hover:text-green group-focus-visible:text-green',
+          {
+            'text-green': open,
+          },
+        )}
+      />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 );

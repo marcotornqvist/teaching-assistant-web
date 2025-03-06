@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'components/ui/Select';
+import { useState } from 'react';
 
 const ChatBox = ({
   stop,
@@ -49,12 +50,16 @@ const ChatBox = ({
   className?: string;
   isLoading: boolean;
 }) => {
+  const [selectOpen, setSelectOpen] = useState(false);
   const form = useForm<ChatboxFormValues>({
     resolver: zodResolver(ChatboxFormSchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
+    shouldUnregister: false,
     defaultValues: {
       text: 'Please compare the coin mentioned in the attachment and ethereum.',
+      file: undefined,
+      model: GOOGLE_MODEL,
     },
   });
 
@@ -115,45 +120,88 @@ const ChatBox = ({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='file'
-            render={({ field: { onChange, value, ...field } }) => (
-              <FormItem>
-                <FormLabel>Upload a file</FormLabel>
-                <FormControl>
-                  <input
-                    type='file'
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        onChange(file);
-                      }
-                    }}
-                    className='border-input bg-background ring-offset-background file:bg-transparent placeholder:text-muted-foreground focus-visible:ring-ring text-sm w-full cursor-pointer rounded-md border px-3 py-2 file:text-sm file:border-0 file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div className='mt-4 flex items-center justify-between'>
-            <div className='flex items-center gap-4'>
-              <button className='flex h-10 w-10 items-center justify-center rounded-md border border-dark-grey transition-colors hover:border-green hover:text-green focus-visible:border-green focus-visible:outline-none'>
-                <Paperclip strokeWidth={1.5} width={20} height={20} />
-              </button>
+            <div className='flex items-center justify-start gap-3'>
+              <FormField
+                control={form.control}
+                name='file'
+                render={({ field: { onChange, value, ...field } }) => {
+                  // Check if current model is Google to enable/disable file upload
+                  const isGoogleModel = form.watch('model') === GOOGLE_MODEL;
+
+                  return (
+                    <FormItem>
+                      <div
+                        className={cn(
+                          'group relative flex h-10 min-w-10 items-center rounded-md border border-dark-grey transition-colors',
+                          isGoogleModel
+                            ? 'focus-within:border-green focus-within:text-green hover:border-green hover:text-green'
+                            : 'cursor-not-allowed opacity-50',
+                        )}
+                      >
+                        <input
+                          type='file'
+                          id='file-upload'
+                          onChange={(e) => {
+                            if (!isGoogleModel) return;
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              onChange(file);
+                            }
+                          }}
+                          disabled={!isGoogleModel}
+                          className={cn(
+                            'absolute inset-0 h-full w-full cursor-pointer opacity-0',
+                            !isGoogleModel && 'cursor-not-allowed',
+                          )}
+                          {...field}
+                        />
+                        <label
+                          htmlFor='file-upload'
+                          className={cn(
+                            'flex max-w-56 items-center justify-between gap-2.5 rounded-md px-2.5 focus-visible:outline-none',
+                            isGoogleModel
+                              ? 'cursor-pointer'
+                              : 'cursor-not-allowed',
+                          )}
+                        >
+                          <Paperclip
+                            strokeWidth={1.5}
+                            className={isGoogleModel ? 'hover:text-green' : ''}
+                            width={20}
+                            height={20}
+                          />
+                          {form.watch('file') && isGoogleModel ? (
+                            <span className='text-sm truncate pr-1 group-hover:text-green'>
+                              {form.watch('file')?.name}
+                            </span>
+                          ) : null}
+                        </label>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
               <FormField
                 control={form.control}
                 name='model'
                 render={({ field }) => (
                   <FormItem>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        // If changing away from Google model, clear any existing file
+                        if (value !== GOOGLE_MODEL && form.watch('file')) {
+                          form.setValue('file', undefined);
+                        }
+                      }}
                       defaultValue={field.value}
+                      onOpenChange={setSelectOpen}
+                      open={selectOpen}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger open={selectOpen}>
                           <SelectValue placeholder={GOOGLE_MODEL} />
                         </SelectTrigger>
                       </FormControl>

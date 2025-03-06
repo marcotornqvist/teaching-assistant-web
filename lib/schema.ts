@@ -127,8 +127,7 @@ export const CreateMaterialFormSchema = z.object({
     })
     .max(200000, {
       message: 'Content must be less than 200,000 characters.',
-    })
-    .trim(),
+    }),
 });
 
 export const ChatMaterialResponseSchema = CreateMaterialFormSchema.pick({
