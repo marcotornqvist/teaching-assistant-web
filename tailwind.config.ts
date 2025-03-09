@@ -39,10 +39,6 @@ export default {
     require('tailwindcss-animate'),
     plugin(function ({ addComponents }) {
       addComponents({
-        ".test": {
-          
-        },
-        
         '.text-xl-bold': {
           fontSize: '1.25rem',
           fontWeight: '700',

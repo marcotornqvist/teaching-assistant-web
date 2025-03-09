@@ -34,7 +34,7 @@ const SelectTrigger = ({
     <SelectPrimitive.Icon asChild>
       <ChevronDown
         className={cn(
-          'h-4 w-4 text-grey group-hover:text-green group-focus-visible:text-green',
+          'h-4 w-4 text-white group-hover:text-green group-focus-visible:text-green',
           {
             'text-green': open,
           },

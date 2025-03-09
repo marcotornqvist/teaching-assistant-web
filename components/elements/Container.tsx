@@ -8,9 +8,7 @@ const Container = ({
   className?: string;
   children: React.ReactNode;
 }) => {
-  return (
-    <div className={cn('w-full px-4 lg:px-10', className)}>{children}</div>
-  );
+  return <div className={cn('w-full px-4 lg:px-6', className)}>{children}</div>;
 };
 
 export default Container;

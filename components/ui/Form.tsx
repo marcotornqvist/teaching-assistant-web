@@ -82,7 +82,7 @@ const FormItem = ({
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('space-y-2', className)} {...props} />
+      <div ref={ref} className={cn(className)} {...props} />
     </FormItemContext.Provider>
   );
 };
@@ -146,7 +146,7 @@ const FormDescription = ({
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
   );
@@ -172,7 +172,7 @@ const FormMessage = ({
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-red text-sm', className)}
+      className={cn('text-sm text-red', className)}
       {...props}
     >
       {body}
