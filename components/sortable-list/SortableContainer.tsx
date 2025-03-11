@@ -1,4 +1,10 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, {
+  useId,
+  useMemo,
+  useState,
+  createContext,
+  useContext,
+} from 'react';
 import type { ReactNode } from 'react';
 import {
   DndContext,
@@ -7,7 +13,11 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import type { Active, UniqueIdentifier } from '@dnd-kit/core';
+import type {
+  Active,
+  UniqueIdentifier,
+  DraggableSyntheticListeners,
+} from '@dnd-kit/core';
 import {
   SortableContext,
   arrayMove,
@@ -16,21 +26,37 @@ import {
 } from '@dnd-kit/sortable';
 
 import { SortableOverlay } from './SortableOverlay';
+import { cn } from 'lib/utils';
+import { GripVertical } from 'lucide-react';
 
 type BaseList = {
   id: UniqueIdentifier;
 };
 
+type ContainerContextType = {
+  attributes: Record<string, any>;
+  listeners: DraggableSyntheticListeners;
+  ref(node: HTMLElement | null): void;
+};
+
+const SortableContainerContext = createContext<ContainerContextType>({
+  attributes: {},
+  listeners: undefined,
+  ref() {},
+});
+
 type Props<T extends BaseList> = {
   lists: T[];
   onChange(lists: T[]): void;
   renderList(list: T): ReactNode;
+  className?: string;
 };
 
 export const SortableContainer = <T extends BaseList>({
   lists,
   onChange,
   renderList,
+  className,
 }: Props<T>) => {
   const id = useId();
   const [active, setActive] = useState<Active | null>(null);
@@ -67,7 +93,7 @@ export const SortableContainer = <T extends BaseList>({
       }}
     >
       <SortableContext items={lists}>
-        <div className='SortableContainer' role='application'>
+        <div role='application' className={cn(className)}>
           {lists.map((list) => (
             <React.Fragment key={list.id}>{renderList(list)}</React.Fragment>
           ))}
@@ -83,18 +109,30 @@ export const SortableContainer = <T extends BaseList>({
 export const SortableContainerItem = ({
   id,
   children,
+  className,
 }: {
   id: UniqueIdentifier;
   children: ReactNode;
+  className?: string;
 }) => {
   const {
     attributes,
     isDragging,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
   } = useSortable({ id });
+
+  const context = useMemo(
+    () => ({
+      attributes,
+      listeners,
+      ref: setActivatorNodeRef,
+    }),
+    [attributes, listeners, setActivatorNodeRef],
+  );
 
   const style = {
     opacity: isDragging ? 0.4 : undefined,
@@ -105,14 +143,31 @@ export const SortableContainerItem = ({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
+    <SortableContainerContext.Provider value={context}>
+      <div ref={setNodeRef} style={style} className={cn(className)}>
+        {children}
+      </div>
+    </SortableContainerContext.Provider>
+  );
+};
+
+export const ContainerDragHandle = ({ className }: { className?: string }) => {
+  const { attributes, listeners, ref } = useContext(SortableContainerContext);
+
+  return (
+    <button
+      className={cn(className)}
+      style={{ touchAction: 'none', WebkitTapHighlightColor: 'transparent' }}
       {...attributes}
       {...listeners}
-      className='SortableContainerItem'
+      ref={ref}
     >
-      {children}
-    </div>
+      <GripVertical
+        strokeWidth={1.5}
+        width={24}
+        height={24}
+        className='text-white'
+      />
+    </button>
   );
 };

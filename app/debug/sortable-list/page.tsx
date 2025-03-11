@@ -25,7 +25,7 @@ function getMockItems(prefix: string, count: number) {
 type ListData = {
   id: string;
   title: string;
-  items: Array<{ id: string; displayId: number }>;
+  items: { id: string; displayId: number }[];
 };
 
 const Page = () => {

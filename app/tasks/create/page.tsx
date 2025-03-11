@@ -13,6 +13,12 @@ import {
 } from 'lucide-react';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { z } from 'zod';
+import {
+  SortableContainer,
+  SortableContainerItem,
+  ContainerDragHandle,
+} from 'components/sortable-list/SortableContainer';
+import { SortableList } from 'components/sortable-list/SortableList';
 
 const INPUT_MAX_LENGTH = 1000;
 
@@ -115,8 +121,28 @@ const Page: React.FC = () => {
       },
     ],
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
+
+  // Updated handler for when questions are reordered
+  const handleListsChange = (newItems: TaskFormData['items']): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: newItems,
+    }));
+  };
+
+  // Updated handler for when answers within a question are reordered
+  const handleItemsChange = (
+    questionId: string,
+    newAnswers: TaskFormData['items'][0]['answers'],
+  ): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === questionId ? { ...item, answers: newAnswers } : item,
+      ),
+    }));
+  };
 
   const handleQuestionChange = (itemId: string, value: string): void => {
     setFormData((prev) => ({
@@ -249,56 +275,49 @@ const Page: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {formData.items.map((item, itemIndex) => (
-        <div
-          key={item.id}
-          className='mb-8 flex w-full flex-1 flex-col rounded-md bg-black p-5'
-        >
-          <div className='mb-4 flex items-center justify-between'>
-            <h3 className='font-medium text-white'>Question {itemIndex + 1}</h3>
-            {formData.items.length > 1 && (
-              <button
-                className='group -m-2 rounded-full p-2 outline-none'
-                type='button'
-                onClick={() => handleRemoveQuestion(item.id)}
-              >
-                <CircleX
-                  strokeWidth={1.5}
-                  className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
-                />
-              </button>
-            )}
-          </div>
+      <SortableContainer
+        lists={formData.items}
+        onChange={handleListsChange}
+        className='flex flex-col gap-12'
+        renderList={(list) => (
+          <SortableContainerItem
+            id={list.id}
+            className='relative flex w-full flex-1 flex-col rounded-md bg-black p-5'
+          >
+            <ContainerDragHandle className='absolute -left-12 top-1/2 -translate-y-1/2 p-2' />
+            <button
+              className='group absolute -right-12 top-1/2 -translate-y-1/2 rounded-full p-2 outline-none'
+              type='button'
+              onClick={() => handleRemoveQuestion(list.id)}
+            >
+              <CircleX
+                strokeWidth={1.5}
+                className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
+              />
+            </button>
 
-          <div className='mb-4'>
-            <TextareaDynamicHeight
-              value={item.text}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                handleQuestionChange(item.id, e.target.value)
-              }
-              placeholder='Write your question here...'
-              maxLength={INPUT_MAX_LENGTH}
-            />
-            {errors[`items.${itemIndex}.text`] && (
-              <p className='text-red-500 text-sm mt-1'>
-                {errors[`items.${itemIndex}.text`]}
-              </p>
-            )}
-          </div>
-
-          {item.answers.length > 0 && (
-            <div className='mb-4 flex flex-col space-y-4'>
-              {item.answers.map((answer, answerIndex) => (
-                <div
-                  key={answer.id}
+            <div className='mb-4'>
+              <TextareaDynamicHeight
+                value={list.text}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                  handleQuestionChange(list.id, e.target.value)
+                }
+                placeholder='Write your question here...'
+                maxLength={INPUT_MAX_LENGTH}
+              />
+            </div>
+            <SortableList
+              items={list.answers}
+              onChange={(items) => {
+                handleItemsChange(list.id, items);
+              }}
+              className='flex flex-col gap-4'
+              renderItem={(answer) => (
+                <SortableList.Item
+                  id={answer.id}
                   className='flex w-full items-center gap-4 space-y-0'
                 >
-                  <GripVertical
-                    strokeWidth={1.5}
-                    width={24}
-                    height={24}
-                    className='text-white'
-                  />
+                  <SortableList.DragHandle />
                   <div
                     className={cn(
                       'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border px-5 py-2.5',
@@ -309,7 +328,7 @@ const Page: React.FC = () => {
                       value={answer.text}
                       onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                         handleAnswerTextChange(
-                          item.id,
+                          list.id,
                           answer.id,
                           e.target.value,
                         )
@@ -321,49 +340,48 @@ const Page: React.FC = () => {
                     <Checkbox
                       checked={answer.isCorrect}
                       onCheckedChange={() =>
-                        handleCorrectAnswerToggle(item.id, answer.id)
+                        handleCorrectAnswerToggle(list.id, answer.id)
                       }
                     />
                   </div>
                   <button
                     className='group -m-2 rounded-full p-2 outline-none'
                     type='button'
-                    onClick={() => handleRemoveAnswer(item.id, answer.id)}
+                    onClick={() => handleRemoveAnswer(list.id, answer.id)}
                   >
                     <CircleX
                       strokeWidth={1.5}
                       className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
                     />
                   </button>
-                </div>
-              ))}
+                </SortableList.Item>
+              )}
+            />
+            <div className='mt-6 flex flex-row flex-wrap items-center gap-x-4 gap-y-3'>
+              <Button
+                type='button'
+                size='iconRight'
+                onClick={() => handleAddAnswer(list.id)}
+              >
+                Add Answer
+                <CirclePlus strokeWidth={1.5} width={20} />
+              </Button>
+              <Button size='iconRight'>
+                Add Hint
+                <CirclePlus strokeWidth={1.5} height={20} />
+              </Button>
+              <Button size='iconRight'>
+                Generate Answers
+                <WandSparkles strokeWidth={1.5} width={20} height={20} />
+              </Button>
+              <Button type='button'>
+                Mark as Text Answer{' '}
+                <NotepadText strokeWidth={1.5} width={20} height={20} />
+              </Button>
             </div>
-          )}
-
-          <div className='mt-2 flex flex-row flex-wrap items-center gap-x-4 gap-y-3'>
-            <Button
-              type='button'
-              size='iconRight'
-              onClick={() => handleAddAnswer(item.id)}
-            >
-              Add Answer
-              <CirclePlus strokeWidth={1.5} width={20} />
-            </Button>
-            <Button size='iconRight'>
-              Add Hint
-              <CirclePlus strokeWidth={1.5} height={20} />
-            </Button>
-            <Button size='iconRight'>
-              Generate Answers
-              <WandSparkles strokeWidth={1.5} width={20} height={20} />
-            </Button>
-            <Button type='button'>
-              Mark as Text Answer{' '}
-              <NotepadText strokeWidth={1.5} width={20} height={20} />
-            </Button>
-          </div>
-        </div>
-      ))}
+          </SortableContainerItem>
+        )}
+      />
 
       <div className='mt-4 flex justify-center'>
         <Button

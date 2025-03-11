@@ -16,6 +16,7 @@ import {
 
 import { SortableOverlay } from './SortableOverlay';
 import { DragHandle, SortableItem } from './SortableItem';
+import { cn } from 'lib/utils';
 
 type BaseItem = {
   id: UniqueIdentifier;
@@ -25,12 +26,14 @@ type Props<T extends BaseItem> = {
   items: T[];
   onChange(items: T[]): void;
   renderItem(item: T): ReactNode;
+  className?: string;
 };
 
 export const SortableList = <T extends BaseItem>({
   items,
   onChange,
   renderItem,
+  className,
 }: Props<T>) => {
   const id = useId();
   const [active, setActive] = useState<Active | null>(null);
@@ -66,7 +69,7 @@ export const SortableList = <T extends BaseItem>({
       }}
     >
       <SortableContext items={items}>
-        <ul className='flex list-none flex-col gap-2.5 p-0' role='application'>
+        <ul role='application' className={cn(className)}>
           {items.map((item) => (
             <React.Fragment key={item.id}>{renderItem(item)}</React.Fragment>
           ))}
