@@ -7,7 +7,7 @@ import { cn } from 'lib/utils';
 import {
   CirclePlus,
   CircleX,
-  GripVertical,
+  Lightbulb,
   NotepadText,
   WandSparkles,
 } from 'lucide-react';
@@ -27,22 +27,23 @@ const CreateTaskFormSchema = z.object({
     .array(
       z.object({
         id: z.string(),
-        text: z
+        text: z.string().max(INPUT_MAX_LENGTH, {
+          message: `Text must be less than ${INPUT_MAX_LENGTH} characters.`,
+        }),
+        hint: z
           .string()
-          .min(3, {
-            message: 'Text must be at least 3 characters.',
-          })
           .max(INPUT_MAX_LENGTH, {
-            message: `Text must be less than ${INPUT_MAX_LENGTH} characters.`,
-          }),
+            message: `Hint must be less than ${INPUT_MAX_LENGTH} characters.`,
+          })
+          .nullable(),
         answers: z.array(
           z.object({
             id: z.string(),
             text: z.string(),
-            hint: z.string().optional(),
             isCorrect: z.boolean(),
           }),
         ),
+        textAnswer: z.boolean().default(false),
       }),
     )
     .min(1, { message: 'At least one question is required' }),
@@ -56,35 +57,203 @@ type FormErrors = {
 
 const generateId = (): string => Math.random().toString(36).substring(2, 15);
 
+type QuestionItemProps = {
+  list: TaskFormData['items'][0];
+  handleQuestionChange: (itemId: string, value: string) => void;
+  handleItemsChange: (
+    questionId: string,
+    newAnswers: TaskFormData['items'][0]['answers'],
+  ) => void;
+  handleAnswerTextChange: (
+    itemId: string,
+    answerId: string,
+    value: string,
+  ) => void;
+  handleCorrectAnswerToggle: (itemId: string, answerId: string) => void;
+  handleRemoveAnswer: (itemId: string, answerId: string) => void;
+  handleAddAnswer: (itemId: string) => void;
+  handleToggleHint: (itemId: string) => void;
+  handleHintTextChange: (itemId: string, value: string) => void;
+  handleToggleTextAnswer: (itemId: string) => void;
+  handleRemoveQuestion: (itemId: string) => void;
+};
+
+const QuestionItem: React.FC<QuestionItemProps> = ({
+  list,
+  handleQuestionChange,
+  handleItemsChange,
+  handleAnswerTextChange,
+  handleCorrectAnswerToggle,
+  handleRemoveAnswer,
+  handleAddAnswer,
+  handleToggleHint,
+  handleHintTextChange,
+  handleToggleTextAnswer,
+  handleRemoveQuestion,
+}) => {
+  return (
+    <SortableContainerItem
+      id={list.id}
+      className='flex w-full flex-1 flex-col rounded-md bg-black p-3 lg:relative lg:p-5'
+    >
+      <div className='flex items-center justify-between max-lg:relative max-lg:mb-5'>
+        <ContainerDragHandle className='lg:absolute lg:-left-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2' />
+        <button
+          className='group rounded-full outline-none lg:absolute lg:-right-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2'
+          type='button'
+          onClick={() => handleRemoveQuestion(list.id)}
+        >
+          <CircleX
+            strokeWidth={1.5}
+            className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
+          />
+        </button>
+      </div>
+      <div className='flex flex-col gap-4'>
+        <TextareaDynamicHeight
+          value={list.text}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            handleQuestionChange(list.id, e.target.value)
+          }
+          placeholder='Write your question here...'
+          maxLength={INPUT_MAX_LENGTH}
+        />
+        {list.answers.length > 0 ? (
+          <SortableList
+            items={list.answers}
+            onChange={(items) => {
+              handleItemsChange(list.id, items);
+            }}
+            className='flex flex-col gap-4'
+            renderItem={(answer) => (
+              <SortableList.Item
+                id={answer.id}
+                className='flex w-full items-center gap-4 space-y-0'
+              >
+                <SortableList.DragHandle />
+                <div
+                  className={cn(
+                    'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border px-3 py-2.5 lg:px-5',
+                    answer.isCorrect ? 'border-green' : 'border-red',
+                  )}
+                >
+                  <TextareaDynamicHeight
+                    value={answer.text}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                      handleAnswerTextChange(list.id, answer.id, e.target.value)
+                    }
+                    className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
+                    placeholder='Write an answer option...'
+                    maxLength={INPUT_MAX_LENGTH}
+                  />
+                  <Checkbox
+                    checked={answer.isCorrect}
+                    onCheckedChange={() =>
+                      handleCorrectAnswerToggle(list.id, answer.id)
+                    }
+                  />
+                </div>
+                <button
+                  className='group -m-2 rounded-full p-2 outline-none'
+                  type='button'
+                  onClick={() => handleRemoveAnswer(list.id, answer.id)}
+                >
+                  <CircleX
+                    strokeWidth={1.5}
+                    className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
+                  />
+                </button>
+              </SortableList.Item>
+            )}
+          />
+        ) : null}
+        {typeof list.hint === 'string' ? (
+          <div
+            className={cn(
+              'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border border-grey px-3 py-2.5 lg:px-5',
+            )}
+          >
+            <TextareaDynamicHeight
+              value={list.hint}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                handleHintTextChange(list.id, e.target.value)
+              }
+              className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
+              placeholder='Write a hint...'
+              maxLength={INPUT_MAX_LENGTH}
+            />
+            <Lightbulb width={24} height={24} className='text-grey' />
+          </div>
+        ) : null}
+        <div className='flex flex-row flex-wrap items-center gap-x-4 gap-y-3'>
+          <Button
+            type='button'
+            size='iconRight'
+            onClick={() => handleAddAnswer(list.id)}
+          >
+            Add Answer
+            <CirclePlus strokeWidth={1.5} width={20} />
+          </Button>
+          <Button
+            size='iconRight'
+            type='button'
+            onClick={() => handleToggleHint(list.id)}
+            className={
+              typeof list.hint === 'string' ? 'border-green text-green' : ''
+            }
+          >
+            {typeof list.hint === 'string' ? 'Remove Hint' : 'Add Hint'}
+            {typeof list.hint === 'string' ? (
+              <CircleX strokeWidth={1.5} height={20} />
+            ) : (
+              <CirclePlus strokeWidth={1.5} height={20} />
+            )}
+          </Button>
+          <Button size='iconRight'>
+            Generate Answers
+            <WandSparkles strokeWidth={1.5} width={20} height={20} />
+          </Button>
+          <Button
+            type='button'
+            onClick={() => handleToggleTextAnswer(list.id)}
+            className={list.textAnswer ? 'border-green text-green' : ''}
+          >
+            Mark as Text Answer
+            <NotepadText strokeWidth={1.5} width={20} height={20} />
+          </Button>
+        </div>
+      </div>
+    </SortableContainerItem>
+  );
+};
+
 const Page: React.FC = () => {
   const [formData, setFormData] = useState<TaskFormData>({
     items: [
       {
         id: generateId(),
         text: 'What colors are in the Swedish flag? (Select all that apply)',
+        hint: null,
+        textAnswer: false,
         answers: [
           {
             id: generateId(),
             text: 'Blue',
-            hint: 'This is one of the correct colors.',
             isCorrect: false,
           },
           {
             id: generateId(),
             text: 'Yellow',
-            hint: 'This is one of the correct colors.',
             isCorrect: false,
           },
           {
             id: generateId(),
             text: 'Red',
-            hint: 'This is not in the Swedish flag.',
             isCorrect: false,
           },
           {
             id: generateId(),
             text: 'Green',
-            hint: 'This is not in the Swedish flag.',
             isCorrect: false,
           },
         ],
@@ -92,29 +261,27 @@ const Page: React.FC = () => {
       {
         id: generateId(),
         text: 'What is the capital of Sweden?',
+        hint: null,
+        textAnswer: false,
         answers: [
           {
             id: generateId(),
             text: 'Oslo',
-            hint: 'This is the capital of Norway.',
             isCorrect: false,
           },
           {
             id: generateId(),
             text: 'Helsinki',
-            hint: 'This is the capital of Finland.',
             isCorrect: false,
           },
           {
             id: generateId(),
             text: 'Stockholm',
-            hint: 'This is the correct answer.',
             isCorrect: true,
           },
           {
             id: generateId(),
             text: 'Copenhagen',
-            hint: 'This is the capital of Denmark.',
             isCorrect: false,
           },
         ],
@@ -123,7 +290,6 @@ const Page: React.FC = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // Updated handler for when questions are reordered
   const handleListsChange = (newItems: TaskFormData['items']): void => {
     setFormData((prev) => ({
       ...prev,
@@ -131,7 +297,6 @@ const Page: React.FC = () => {
     }));
   };
 
-  // Updated handler for when answers within a question are reordered
   const handleItemsChange = (
     questionId: string,
     newAnswers: TaskFormData['items'][0]['answers'],
@@ -194,6 +359,43 @@ const Page: React.FC = () => {
     }));
   };
 
+  const handleToggleHint = (itemId: string): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              hint: typeof item.hint === 'string' ? null : '',
+            }
+          : item,
+      ),
+    }));
+  };
+
+  const handleHintTextChange = (itemId: string, value: string): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === itemId ? { ...item, hint: value } : item,
+      ),
+    }));
+  };
+
+  const handleToggleTextAnswer = (itemId: string): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              textAnswer: !item.textAnswer,
+            }
+          : item,
+      ),
+    }));
+  };
+
   const handleAddQuestion = (): void => {
     setFormData((prev) => ({
       ...prev,
@@ -202,11 +404,12 @@ const Page: React.FC = () => {
         {
           id: generateId(),
           text: '',
+          hint: null,
+          textAnswer: false,
           answers: [
             {
               id: generateId(),
               text: '',
-              hint: '',
               isCorrect: false,
             },
           ],
@@ -231,7 +434,7 @@ const Page: React.FC = () => {
               ...item,
               answers: [
                 ...item.answers,
-                { id: generateId(), text: '', hint: '', isCorrect: false },
+                { id: generateId(), text: '', isCorrect: false },
               ],
             }
           : item,
@@ -278,123 +481,32 @@ const Page: React.FC = () => {
       <SortableContainer
         lists={formData.items}
         onChange={handleListsChange}
-        className='flex flex-col gap-12'
+        className='flex flex-col gap-8 lg:gap-12'
         renderList={(list) => (
-          <SortableContainerItem
-            id={list.id}
-            className='relative flex w-full flex-1 flex-col rounded-md bg-black p-5'
-          >
-            <ContainerDragHandle className='absolute -left-12 top-1/2 -translate-y-1/2 p-2' />
-            <button
-              className='group absolute -right-12 top-1/2 -translate-y-1/2 rounded-full p-2 outline-none'
-              type='button'
-              onClick={() => handleRemoveQuestion(list.id)}
-            >
-              <CircleX
-                strokeWidth={1.5}
-                className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
-              />
-            </button>
-
-            <div className='mb-4'>
-              <TextareaDynamicHeight
-                value={list.text}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                  handleQuestionChange(list.id, e.target.value)
-                }
-                placeholder='Write your question here...'
-                maxLength={INPUT_MAX_LENGTH}
-              />
-            </div>
-            <SortableList
-              items={list.answers}
-              onChange={(items) => {
-                handleItemsChange(list.id, items);
-              }}
-              className='flex flex-col gap-4'
-              renderItem={(answer) => (
-                <SortableList.Item
-                  id={answer.id}
-                  className='flex w-full items-center gap-4 space-y-0'
-                >
-                  <SortableList.DragHandle />
-                  <div
-                    className={cn(
-                      'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border px-5 py-2.5',
-                      answer.isCorrect ? 'border-green' : 'border-red',
-                    )}
-                  >
-                    <TextareaDynamicHeight
-                      value={answer.text}
-                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                        handleAnswerTextChange(
-                          list.id,
-                          answer.id,
-                          e.target.value,
-                        )
-                      }
-                      className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
-                      placeholder='Write an answer option...'
-                      maxLength={INPUT_MAX_LENGTH}
-                    />
-                    <Checkbox
-                      checked={answer.isCorrect}
-                      onCheckedChange={() =>
-                        handleCorrectAnswerToggle(list.id, answer.id)
-                      }
-                    />
-                  </div>
-                  <button
-                    className='group -m-2 rounded-full p-2 outline-none'
-                    type='button'
-                    onClick={() => handleRemoveAnswer(list.id, answer.id)}
-                  >
-                    <CircleX
-                      strokeWidth={1.5}
-                      className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
-                    />
-                  </button>
-                </SortableList.Item>
-              )}
-            />
-            <div className='mt-6 flex flex-row flex-wrap items-center gap-x-4 gap-y-3'>
-              <Button
-                type='button'
-                size='iconRight'
-                onClick={() => handleAddAnswer(list.id)}
-              >
-                Add Answer
-                <CirclePlus strokeWidth={1.5} width={20} />
-              </Button>
-              <Button size='iconRight'>
-                Add Hint
-                <CirclePlus strokeWidth={1.5} height={20} />
-              </Button>
-              <Button size='iconRight'>
-                Generate Answers
-                <WandSparkles strokeWidth={1.5} width={20} height={20} />
-              </Button>
-              <Button type='button'>
-                Mark as Text Answer{' '}
-                <NotepadText strokeWidth={1.5} width={20} height={20} />
-              </Button>
-            </div>
-          </SortableContainerItem>
+          <QuestionItem
+            list={list}
+            handleQuestionChange={handleQuestionChange}
+            handleItemsChange={handleItemsChange}
+            handleAnswerTextChange={handleAnswerTextChange}
+            handleCorrectAnswerToggle={handleCorrectAnswerToggle}
+            handleRemoveAnswer={handleRemoveAnswer}
+            handleAddAnswer={handleAddAnswer}
+            handleToggleHint={handleToggleHint}
+            handleHintTextChange={handleHintTextChange}
+            handleToggleTextAnswer={handleToggleTextAnswer}
+            handleRemoveQuestion={handleRemoveQuestion}
+          />
         )}
       />
 
-      <div className='mt-4 flex justify-center'>
-        <Button
-          type='button'
-          onClick={handleAddQuestion}
-          className='w-full md:w-auto'
-        >
+      <div className='mt-8 flex justify-center lg:mt-12'>
+        <Button type='button' onClick={handleAddQuestion} className=''>
           Add Question <CirclePlus className='ml-2' strokeWidth={1.5} />
         </Button>
       </div>
 
-      <div className='mt-8 flex justify-end'>
-        <Button type='submit'>Save Task</Button>
+      <div className='mt-8 flex justify-center lg:mt-12'>
+        <Button type='submit'>Submit Task</Button>
       </div>
     </form>
   );

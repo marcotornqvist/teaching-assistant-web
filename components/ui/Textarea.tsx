@@ -1,5 +1,5 @@
 import { cn } from 'lib/utils';
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
 const Textarea = ({
   className,

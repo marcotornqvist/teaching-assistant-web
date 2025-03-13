@@ -15,7 +15,7 @@ const Checkbox = ({
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
-      'peer h-5 w-5 rounded-sm border border-grey focus-visible:border-green focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-green data-[state=checked]:bg-green data-[state=checked]:text-white',
+      'peer min-h-5 min-w-5 rounded-sm border border-grey focus-visible:border-green focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-green data-[state=checked]:bg-green data-[state=checked]:text-white',
       className,
     )}
     {...props}
