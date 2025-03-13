@@ -11,7 +11,7 @@ import {
   NotepadText,
   WandSparkles,
 } from 'lucide-react';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { z } from 'zod';
 import {
   SortableContainer,
@@ -19,6 +19,7 @@ import {
   ContainerDragHandle,
 } from 'components/sortable-list/SortableContainer';
 import { SortableList } from 'components/sortable-list/SortableList';
+import { toast } from 'sonner';
 
 const INPUT_MAX_LENGTH = 1000;
 
@@ -36,13 +37,17 @@ const CreateTaskFormSchema = z.object({
             message: `Hint must be less than ${INPUT_MAX_LENGTH} characters.`,
           })
           .nullable(),
-        answers: z.array(
-          z.object({
-            id: z.string(),
-            text: z.string(),
-            isCorrect: z.boolean(),
+        answers: z
+          .array(
+            z.object({
+              id: z.string(),
+              text: z.string(),
+              isCorrect: z.boolean(),
+            }),
+          )
+          .min(1, {
+            message: 'At least one answer is required',
           }),
-        ),
         textAnswer: z.boolean().default(false),
       }),
     )
@@ -293,16 +298,19 @@ const Page: React.FC = () => {
       const validatedData = CreateTaskFormSchema.parse(formData);
       console.log('submitted', validatedData);
       setErrors({});
+      toast.success('Task submitted successfully!');
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log(error);
+        toast.error('Validation error. Please check your input.');
         const formattedErrors: FormErrors = {};
         error.errors.forEach((err) => {
           const path = err.path.join('.');
           formattedErrors[path] = err.message;
         });
+        console.log(formattedErrors);
         setErrors(formattedErrors);
       }
-      console.error('Validation error:', error);
     }
   };
 
