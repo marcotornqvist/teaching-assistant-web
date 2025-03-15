@@ -11,7 +11,7 @@ import {
   NotepadText,
   WandSparkles,
 } from 'lucide-react';
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { z } from 'zod';
 import {
   SortableContainer,
@@ -41,28 +41,34 @@ const CreateTaskFormSchema = z.object({
           .array(
             z.object({
               id: z.string(),
-              text: z.string(),
+              text: z
+                .string()
+                .min(1, {
+                  message: 'Answer must be at least 1 character long.',
+                })
+                .max(INPUT_MAX_LENGTH, {
+                  message: `Answer must be less than ${INPUT_MAX_LENGTH} characters.`,
+                }),
               isCorrect: z.boolean(),
+              errors: z.array(z.string()),
             }),
           )
           .min(1, {
-            message: 'At least one answer is required',
+            message: 'At least one answer is required.',
           }),
         textAnswer: z.boolean().default(false),
+        errors: z.array(z.string()),
       }),
     )
-    .min(1, { message: 'At least one question is required' }),
+    .min(1, { message: 'At least one question is required.' }),
 });
 
 type TaskFormData = z.infer<typeof CreateTaskFormSchema>;
 
-type FormErrors = {
-  [key: string]: string;
-};
-
 const generateId = (): string => Math.random().toString(36).substring(2, 15);
 
 const Page: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<TaskFormData>({
     items: [
       {
@@ -70,26 +76,31 @@ const Page: React.FC = () => {
         text: 'What colors are in the Swedish flag? (Select all that apply)',
         hint: null,
         textAnswer: false,
+        errors: [],
         answers: [
           {
             id: generateId(),
             text: 'Blue',
             isCorrect: false,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Yellow',
             isCorrect: false,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Red',
             isCorrect: false,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Green',
             isCorrect: false,
+            errors: [],
           },
         ],
       },
@@ -98,32 +109,36 @@ const Page: React.FC = () => {
         text: 'What is the capital of Sweden?',
         hint: null,
         textAnswer: false,
+        errors: [],
         answers: [
           {
             id: generateId(),
             text: 'Oslo',
             isCorrect: false,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Helsinki',
             isCorrect: false,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Stockholm',
             isCorrect: true,
+            errors: [],
           },
           {
             id: generateId(),
             text: 'Copenhagen',
             isCorrect: false,
+            errors: [],
           },
         ],
       },
     ],
   });
-  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleListsChange = (newItems: TaskFormData['items']): void => {
     setFormData((prev) => ({
@@ -241,11 +256,13 @@ const Page: React.FC = () => {
           text: '',
           hint: null,
           textAnswer: false,
+          errors: [],
           answers: [
             {
               id: generateId(),
               text: '',
               isCorrect: false,
+              errors: [],
             },
           ],
         },
@@ -269,7 +286,7 @@ const Page: React.FC = () => {
               ...item,
               answers: [
                 ...item.answers,
-                { id: generateId(), text: '', isCorrect: false },
+                { id: generateId(), text: '', isCorrect: false, errors: [] },
               ],
             }
           : item,
@@ -291,26 +308,63 @@ const Page: React.FC = () => {
     }));
   };
 
+  const resetAllErrors = (): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) => ({
+        ...item,
+        errors: [],
+      })),
+    }));
+  };
+
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const validatedData = CreateTaskFormSchema.parse(formData);
+      resetAllErrors();
       console.log('submitted', validatedData);
-      setErrors({});
       toast.success('Task submitted successfully!');
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.log(error);
-        toast.error('Validation error. Please check your input.');
-        const formattedErrors: FormErrors = {};
-        error.errors.forEach((err) => {
-          const path = err.path.join('.');
-          formattedErrors[path] = err.message;
-        });
-        console.log(formattedErrors);
-        setErrors(formattedErrors);
+        const globalErrors = error.errors.filter(
+          (err) => err.path.length === 1,
+        );
+
+        if (globalErrors.length > 0) {
+          toast.error(globalErrors.map((err) => err.message).join(' '));
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          items: prev.items.map((item, i) => {
+            const itemErrors = error.errors.filter(
+              (err) => err.path[1] === i && err.path.length === 3,
+            );
+
+            const answerErrors = error.errors.filter(
+              (err) => err.path[1] === i && err.path.length === 5,
+            );
+
+            return {
+              ...item,
+              errors: itemErrors.map((err) => err.message),
+              answers: item.answers.map((answer, j) => ({
+                ...answer,
+                errors: answerErrors
+                  .filter((err) => err.path[3] === j)
+                  .map((err) => err.message),
+              })),
+            };
+          }),
+        }));
+      } else {
+        toast.error('An unexpected error occurred. Please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -320,9 +374,9 @@ const Page: React.FC = () => {
         lists={formData.items}
         onChange={handleListsChange}
         className='flex flex-col gap-8 lg:gap-12'
-        renderList={(list) => (
+        renderList={(item) => (
           <QuestionItem
-            list={list}
+            item={item}
             handleQuestionChange={handleQuestionChange}
             handleItemsChange={handleItemsChange}
             handleAnswerTextChange={handleAnswerTextChange}
@@ -344,14 +398,16 @@ const Page: React.FC = () => {
       </div>
 
       <div className='mt-8 flex justify-center lg:mt-12'>
-        <Button type='submit'>Submit Task</Button>
+        <Button type='submit' disabled={isLoading}>
+          Submit Task
+        </Button>
       </div>
     </form>
   );
 };
 
 type QuestionItemProps = {
-  list: TaskFormData['items'][0];
+  item: TaskFormData['items'][0];
   handleQuestionChange: (itemId: string, value: string) => void;
   handleItemsChange: (
     questionId: string,
@@ -372,7 +428,7 @@ type QuestionItemProps = {
 };
 
 const QuestionItem: React.FC<QuestionItemProps> = ({
-  list,
+  item,
   handleQuestionChange,
   handleItemsChange,
   handleAnswerTextChange,
@@ -386,15 +442,21 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
 }) => {
   return (
     <SortableContainerItem
-      id={list.id}
-      className='flex w-full flex-1 flex-col rounded-md bg-black p-3 lg:relative lg:p-5'
+      id={item.id}
+      className={cn(
+        'flex w-full flex-1 flex-col rounded-md border bg-black p-3 lg:relative lg:p-5',
+        item.errors.length > 0 ||
+          item.answers.some((answer) => answer.errors.length > 0)
+          ? 'border-red'
+          : 'border-black',
+      )}
     >
       <div className='flex items-center justify-between max-lg:relative max-lg:mb-5'>
         <ContainerDragHandle className='lg:absolute lg:-left-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2' />
         <button
           className='group rounded-full outline-none lg:absolute lg:-right-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2'
           type='button'
-          onClick={() => handleRemoveQuestion(list.id)}
+          onClick={() => handleRemoveQuestion(item.id)}
         >
           <CircleX
             strokeWidth={1.5}
@@ -404,72 +466,83 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
       </div>
       <div className='flex flex-col gap-4'>
         <TextareaDynamicHeight
-          value={list.text}
+          value={item.text}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-            handleQuestionChange(list.id, e.target.value)
+            handleQuestionChange(item.id, e.target.value)
           }
           placeholder='Write your question here...'
           maxLength={INPUT_MAX_LENGTH}
         />
-        {list.answers.length > 0 ? (
+        {item.answers.length > 0 ? (
           <SortableList
-            items={list.answers}
+            items={item.answers}
             onChange={(items) => {
-              handleItemsChange(list.id, items);
+              handleItemsChange(item.id, items);
             }}
             className='flex flex-col gap-4'
             renderItem={(answer) => (
               <SortableList.Item
                 id={answer.id}
-                className='flex w-full items-center gap-4 space-y-0'
+                className='flex w-full flex-col gap-4 space-y-0'
               >
-                <SortableList.DragHandle />
-                <div
-                  className={cn(
-                    'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border px-3 py-2.5 lg:px-5',
-                    answer.isCorrect ? 'border-green' : 'border-red',
-                  )}
-                >
-                  <TextareaDynamicHeight
-                    value={answer.text}
-                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                      handleAnswerTextChange(list.id, answer.id, e.target.value)
-                    }
-                    className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
-                    placeholder='Write an answer option...'
-                    maxLength={INPUT_MAX_LENGTH}
-                  />
-                  <Checkbox
-                    checked={answer.isCorrect}
-                    onCheckedChange={() =>
-                      handleCorrectAnswerToggle(list.id, answer.id)
-                    }
-                  />
+                <div className='flex w-full flex-row gap-4'>
+                  <SortableList.DragHandle />
+                  <div
+                    className={cn(
+                      'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border px-3 py-2.5 lg:px-5',
+                      answer.isCorrect ? 'border-green' : 'border-red',
+                    )}
+                  >
+                    <TextareaDynamicHeight
+                      value={answer.text}
+                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                        handleAnswerTextChange(
+                          item.id,
+                          answer.id,
+                          e.target.value,
+                        )
+                      }
+                      className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
+                      placeholder='Write an answer option...'
+                      maxLength={INPUT_MAX_LENGTH}
+                    />
+                    <Checkbox
+                      checked={answer.isCorrect}
+                      onCheckedChange={() =>
+                        handleCorrectAnswerToggle(item.id, answer.id)
+                      }
+                    />
+                  </div>
+                  <button
+                    className='group -m-2 rounded-full p-2 outline-none'
+                    type='button'
+                    onClick={() => handleRemoveAnswer(item.id, answer.id)}
+                  >
+                    <CircleX
+                      strokeWidth={1.5}
+                      className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
+                    />
+                  </button>
                 </div>
-                <button
-                  className='group -m-2 rounded-full p-2 outline-none'
-                  type='button'
-                  onClick={() => handleRemoveAnswer(list.id, answer.id)}
-                >
-                  <CircleX
-                    strokeWidth={1.5}
-                    className='text-red group-hover:fill-red group-hover:text-white group-focus-visible:fill-red group-focus-visible:text-white'
-                  />
-                </button>
+                {answer.errors.length > 0 ? (
+                  <span className='text-sm px-10 text-red'>
+                    {answer.errors.join(' ')}
+                  </span>
+                ) : null}
               </SortableList.Item>
             )}
           />
         ) : null}
-        {typeof list.hint === 'string' ? (
+        {typeof item.hint === 'string' ? (
           <div
             className={cn(
               'flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border border-grey px-3 py-2.5 lg:px-5',
             )}
           >
             <TextareaDynamicHeight
-              value={list.hint}
+              value={item.hint}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                handleHintTextChange(list.id, e.target.value)
+                handleHintTextChange(item.id, e.target.value)
               }
               className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
               placeholder='Write a hint...'
@@ -482,7 +555,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
           <Button
             type='button'
             size='iconRight'
-            onClick={() => handleAddAnswer(list.id)}
+            onClick={() => handleAddAnswer(item.id)}
           >
             Add Answer
             <CirclePlus strokeWidth={1.5} width={20} />
@@ -490,13 +563,13 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
           <Button
             size='iconRight'
             type='button'
-            onClick={() => handleToggleHint(list.id)}
+            onClick={() => handleToggleHint(item.id)}
             className={
-              typeof list.hint === 'string' ? 'border-green text-green' : ''
+              typeof item.hint === 'string' ? 'border-green text-green' : ''
             }
           >
-            {typeof list.hint === 'string' ? 'Remove Hint' : 'Add Hint'}
-            {typeof list.hint === 'string' ? (
+            {typeof item.hint === 'string' ? 'Remove Hint' : 'Add Hint'}
+            {typeof item.hint === 'string' ? (
               <CircleX strokeWidth={1.5} height={20} />
             ) : (
               <CirclePlus strokeWidth={1.5} height={20} />
@@ -508,13 +581,16 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
           </Button>
           <Button
             type='button'
-            onClick={() => handleToggleTextAnswer(list.id)}
-            className={list.textAnswer ? 'border-green text-green' : ''}
+            onClick={() => handleToggleTextAnswer(item.id)}
+            className={item.textAnswer ? 'border-green text-green' : ''}
           >
             Mark as Text Answer
             <NotepadText strokeWidth={1.5} width={20} height={20} />
           </Button>
         </div>
+        {item.errors.length > 0 ? (
+          <span className='text-sm text-red'>{item.errors.join(' ')}</span>
+        ) : null}
       </div>
     </SortableContainerItem>
   );
