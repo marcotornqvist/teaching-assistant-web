@@ -7,8 +7,8 @@ import { z } from 'zod';
 import { SortableContainer } from 'components/sortable-list/SortableContainer';
 import { toast } from 'sonner';
 import QuestionItem from 'components/task/QuestionItem';
-import { generateId } from 'lib/helpers/generateId';
-import { useCreateTaskProvider } from 'lib/context/CreateTaskProvider';
+import { useCreateTaskContext } from 'lib/context/CreateTaskProvider';
+import Toolbar from './Toolbar';
 
 export const INPUT_MAX_LENGTH = 1000;
 
@@ -72,11 +72,11 @@ const Page = () => {
     handleAddQuestion,
     handleRemoveQuestion,
     handleAddAnswer,
-    resetAllErrors,
+    handleResetAllErrors,
     handleListsChange,
     handleItemsChange,
     handleRemoveAnswer,
-  } = useCreateTaskProvider();
+  } = useCreateTaskContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent): void => {
@@ -85,7 +85,7 @@ const Page = () => {
 
     try {
       const validatedData = CreateTaskFormSchema.parse(formData);
-      resetAllErrors();
+      handleResetAllErrors();
       console.log('submitted', validatedData);
       toast.success('Task submitted successfully!');
     } catch (error) {
@@ -134,12 +134,13 @@ const Page = () => {
       onSubmit={handleSubmit}
       className='mb-8 flex flex-1 flex-col lg:mb-12'
     >
+      <Toolbar />
       <div className='flex flex-1 flex-col justify-center'>
         <div className='flex flex-1'>
           <SortableContainer
             lists={formData.items}
             onChange={handleListsChange}
-            className='flex flex-1 flex-col gap-8 lg:gap-12'
+            className='flex flex-1 flex-col gap-8'
             renderList={(item) => (
               <QuestionItem
                 item={item}

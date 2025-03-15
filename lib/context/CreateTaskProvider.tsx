@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 
-export type QuestionItemFunctionality = {
+export type QuestionItemHandlerType = {
   handleQuestionChange: (itemId: string, value: string) => void;
   handleItemsChange: (
     questionId: string,
@@ -35,8 +35,9 @@ type CreateTaskContextType = {
   setFormData: Dispatch<SetStateAction<TaskFormData>>;
   handleListsChange: (newItems: TaskFormData['items']) => void;
   handleAddQuestion: () => void;
-  resetAllErrors: () => void;
-} & QuestionItemFunctionality;
+  handleResetAllErrors: () => void;
+  handleRemoveAllQuestions: () => void;
+} & QuestionItemHandlerType;
 
 const CreateTaskContext = createContext<CreateTaskContextType>({
   formData: {
@@ -55,7 +56,8 @@ const CreateTaskContext = createContext<CreateTaskContextType>({
   handleRemoveQuestion: () => {},
   handleAddAnswer: () => {},
   handleRemoveAnswer: () => {},
-  resetAllErrors: () => {},
+  handleResetAllErrors: () => {},
+  handleRemoveAllQuestions: () => {},
 } satisfies CreateTaskContextType);
 
 export const CreateTaskProvider = ({
@@ -302,7 +304,7 @@ export const CreateTaskProvider = ({
     }));
   };
 
-  const resetAllErrors = (): void => {
+  const handleResetAllErrors = (): void => {
     setFormData((prev) => ({
       ...prev,
       items: prev.items.map((item) => ({
@@ -311,6 +313,14 @@ export const CreateTaskProvider = ({
       })),
     }));
   };
+
+  const handleRemoveAllQuestions = (): void => {
+    setFormData((prev) => ({
+      ...prev,
+      items: [],
+    }));
+  };
+
   return (
     <CreateTaskContext.Provider
       value={{
@@ -325,10 +335,11 @@ export const CreateTaskProvider = ({
         handleAddQuestion,
         handleRemoveQuestion,
         handleAddAnswer,
-        resetAllErrors,
+        handleResetAllErrors,
         handleListsChange,
         handleItemsChange,
         handleRemoveAnswer,
+        handleRemoveAllQuestions,
       }}
     >
       {children}
@@ -336,7 +347,7 @@ export const CreateTaskProvider = ({
   );
 };
 
-export const useCreateTaskProvider = () => {
+export const useCreateTaskContext = () => {
   const context = useContext(CreateTaskContext);
   if (!context) {
     throw new Error(

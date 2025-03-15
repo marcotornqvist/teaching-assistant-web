@@ -18,11 +18,11 @@ import {
 } from 'components/sortable-list/SortableContainer';
 import { SortableList } from 'components/sortable-list/SortableList';
 import { INPUT_MAX_LENGTH, TaskFormData } from './TaskForm';
-import { QuestionItemFunctionality } from 'lib/context/CreateTaskProvider';
+import { QuestionItemHandlerType } from 'lib/context/CreateTaskProvider';
 
 type QuestionItemProps = {
   item: TaskFormData['items'][0];
-} & QuestionItemFunctionality;
+} & QuestionItemHandlerType;
 
 const QuestionItem: React.FC<QuestionItemProps> = ({
   item,
