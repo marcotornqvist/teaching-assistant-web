@@ -18,27 +18,11 @@ import {
 } from 'components/sortable-list/SortableContainer';
 import { SortableList } from 'components/sortable-list/SortableList';
 import { INPUT_MAX_LENGTH, TaskFormData } from './TaskForm';
+import { QuestionItemFunctionality } from 'lib/context/CreateTaskProvider';
 
 type QuestionItemProps = {
   item: TaskFormData['items'][0];
-  handleQuestionChange: (itemId: string, value: string) => void;
-  handleItemsChange: (
-    questionId: string,
-    newAnswers: TaskFormData['items'][0]['answers'],
-  ) => void;
-  handleAnswerTextChange: (
-    itemId: string,
-    answerId: string,
-    value: string,
-  ) => void;
-  handleCorrectAnswerToggle: (itemId: string, answerId: string) => void;
-  handleRemoveAnswer: (itemId: string, answerId: string) => void;
-  handleAddAnswer: (itemId: string) => void;
-  handleToggleHint: (itemId: string) => void;
-  handleHintTextChange: (itemId: string, value: string) => void;
-  handleToggleTextAnswer: (itemId: string) => void;
-  handleRemoveQuestion: (itemId: string) => void;
-};
+} & QuestionItemFunctionality;
 
 const QuestionItem: React.FC<QuestionItemProps> = ({
   item,
@@ -57,7 +41,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
     <SortableContainerItem
       id={item.id}
       className={cn(
-        'flex w-full flex-1 flex-col rounded-md border bg-black p-3 lg:relative lg:p-5',
+        'flex w-full flex-col rounded-md border bg-black p-3 lg:relative lg:p-5',
         item.errors.length > 0 ||
           item.answers.some((answer) => answer.errors.length > 0)
           ? 'border-red'

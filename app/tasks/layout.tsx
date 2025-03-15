@@ -9,7 +9,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <Header />
       <Main>
         <Container>
-          <div className='mx-auto lg:max-w-[900px]'>{children}</div>
+          <div className='mx-auto flex h-full flex-col lg:max-w-[900px]'>
+            {children}
+          </div>
         </Container>
       </Main>
     </>

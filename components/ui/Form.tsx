@@ -100,7 +100,7 @@ const FormLabel = ({
   return (
     <Label
       ref={ref}
-      className={cn('!text-sm-bold ml-2', error && 'text-red', className)}
+      className={cn('!text-sm-medium ml-2', error && 'text-red', className)}
       htmlFor={formItemId}
       {...props}
     />

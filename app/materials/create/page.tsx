@@ -4,7 +4,6 @@ import CreateMaterialForm from './CreateMaterialForm';
 import { experimental_useObject as useObject } from '@ai-sdk/react';
 
 import ChatBox from 'components/misc/chat-box/ChatBox';
-import UploadFile from 'components/UploadFile';
 import { ChatMaterialResponseSchema } from 'lib/schema';
 
 const Page = () => {
@@ -20,7 +19,6 @@ const Page = () => {
         streamedContent={object?.content}
       />
       <ChatBox submit={submit} isLoading={isLoading} stop={stop} />
-      {/* <UploadFile /> */}
     </div>
   );
 };

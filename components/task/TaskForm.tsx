@@ -8,7 +8,7 @@ import { SortableContainer } from 'components/sortable-list/SortableContainer';
 import { toast } from 'sonner';
 import QuestionItem from 'components/task/QuestionItem';
 import { generateId } from 'lib/helpers/generateId';
-import Toolbar from './Toolbar';
+import { useCreateTaskProvider } from 'lib/context/CreateTaskProvider';
 
 export const INPUT_MAX_LENGTH = 1000;
 
@@ -17,9 +17,14 @@ const CreateTaskFormSchema = z.object({
     .array(
       z.object({
         id: z.string(),
-        text: z.string().max(INPUT_MAX_LENGTH, {
-          message: `Text must be less than ${INPUT_MAX_LENGTH} characters.`,
-        }),
+        text: z
+          .string()
+          .min(1, {
+            message: 'Question must be at least 1 character long.',
+          })
+          .max(INPUT_MAX_LENGTH, {
+            message: `Question must be less than ${INPUT_MAX_LENGTH} characters.`,
+          }),
         hint: z
           .string()
           .max(INPUT_MAX_LENGTH, {
@@ -54,194 +59,25 @@ const CreateTaskFormSchema = z.object({
 
 export type TaskFormData = z.infer<typeof CreateTaskFormSchema>;
 
-type TaskFormProps = {
-  formData: TaskFormData;
-  setFormData: React.Dispatch<React.SetStateAction<TaskFormData>>;
-};
-
-const Page: React.FC<TaskFormProps> = ({
-  formData,
-  setFormData,
-}: TaskFormProps) => {
+const Page = () => {
+  const {
+    formData,
+    setFormData,
+    handleQuestionChange,
+    handleAnswerTextChange,
+    handleCorrectAnswerToggle,
+    handleToggleHint,
+    handleHintTextChange,
+    handleToggleTextAnswer,
+    handleAddQuestion,
+    handleRemoveQuestion,
+    handleAddAnswer,
+    resetAllErrors,
+    handleListsChange,
+    handleItemsChange,
+    handleRemoveAnswer,
+  } = useCreateTaskProvider();
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleListsChange = (newItems: TaskFormData['items']): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: newItems,
-    }));
-  };
-
-  const handleItemsChange = (
-    questionId: string,
-    newAnswers: TaskFormData['items'][0]['answers'],
-  ): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === questionId ? { ...item, answers: newAnswers } : item,
-      ),
-    }));
-  };
-
-  const handleQuestionChange = (itemId: string, value: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId ? { ...item, text: value } : item,
-      ),
-    }));
-  };
-
-  const handleAnswerTextChange = (
-    itemId: string,
-    answerId: string,
-    value: string,
-  ): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              answers: item.answers.map((answer) =>
-                answer.id === answerId ? { ...answer, text: value } : answer,
-              ),
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleCorrectAnswerToggle = (
-    itemId: string,
-    answerId: string,
-  ): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              answers: item.answers.map((answer) =>
-                answer.id === answerId
-                  ? { ...answer, isCorrect: !answer.isCorrect }
-                  : answer,
-              ),
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleToggleHint = (itemId: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              hint: typeof item.hint === 'string' ? null : '',
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleHintTextChange = (itemId: string, value: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId ? { ...item, hint: value } : item,
-      ),
-    }));
-  };
-
-  const handleToggleTextAnswer = (itemId: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              textAnswer: !item.textAnswer,
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleAddQuestion = (): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: [
-        ...prev.items,
-        {
-          id: generateId(),
-          text: '',
-          hint: null,
-          textAnswer: false,
-          errors: [],
-          answers: [
-            {
-              id: generateId(),
-              text: '',
-              isCorrect: false,
-              errors: [],
-            },
-          ],
-        },
-      ],
-    }));
-  };
-
-  const handleRemoveQuestion = (itemId: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.filter((item) => item.id !== itemId),
-    }));
-  };
-
-  const handleAddAnswer = (itemId: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              answers: [
-                ...item.answers,
-                { id: generateId(), text: '', isCorrect: false, errors: [] },
-              ],
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const handleRemoveAnswer = (itemId: string, answerId: string): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              answers: item.answers.filter((answer) => answer.id !== answerId),
-            }
-          : item,
-      ),
-    }));
-  };
-
-  const resetAllErrors = (): void => {
-    setFormData((prev) => ({
-      ...prev,
-      items: prev.items.map((item) => ({
-        ...item,
-        errors: [],
-      })),
-    }));
-  };
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
@@ -294,33 +130,38 @@ const Page: React.FC<TaskFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Toolbar />
-      <SortableContainer
-        lists={formData.items}
-        onChange={handleListsChange}
-        className='flex flex-col gap-8 lg:gap-12'
-        renderList={(item) => (
-          <QuestionItem
-            item={item}
-            handleQuestionChange={handleQuestionChange}
-            handleItemsChange={handleItemsChange}
-            handleAnswerTextChange={handleAnswerTextChange}
-            handleCorrectAnswerToggle={handleCorrectAnswerToggle}
-            handleRemoveAnswer={handleRemoveAnswer}
-            handleAddAnswer={handleAddAnswer}
-            handleToggleHint={handleToggleHint}
-            handleHintTextChange={handleHintTextChange}
-            handleToggleTextAnswer={handleToggleTextAnswer}
-            handleRemoveQuestion={handleRemoveQuestion}
+    <form
+      onSubmit={handleSubmit}
+      className='mb-8 flex flex-1 flex-col lg:mb-12'
+    >
+      <div className='flex flex-1 flex-col justify-center'>
+        <div className='flex flex-1'>
+          <SortableContainer
+            lists={formData.items}
+            onChange={handleListsChange}
+            className='flex flex-1 flex-col gap-8 lg:gap-12'
+            renderList={(item) => (
+              <QuestionItem
+                item={item}
+                handleQuestionChange={handleQuestionChange}
+                handleItemsChange={handleItemsChange}
+                handleAnswerTextChange={handleAnswerTextChange}
+                handleCorrectAnswerToggle={handleCorrectAnswerToggle}
+                handleRemoveAnswer={handleRemoveAnswer}
+                handleAddAnswer={handleAddAnswer}
+                handleToggleHint={handleToggleHint}
+                handleHintTextChange={handleHintTextChange}
+                handleToggleTextAnswer={handleToggleTextAnswer}
+                handleRemoveQuestion={handleRemoveQuestion}
+              />
+            )}
           />
-        )}
-      />
-
-      <div className='mt-8 flex justify-center lg:mt-12'>
-        <Button type='button' onClick={handleAddQuestion} className=''>
-          Add Question <CirclePlus className='ml-2' strokeWidth={1.5} />
-        </Button>
+        </div>
+        <div className='mt-8 flex justify-center lg:mt-12'>
+          <Button type='button' onClick={handleAddQuestion} className=''>
+            Add Question Block <CirclePlus className='ml-2' strokeWidth={1.5} />
+          </Button>
+        </div>
       </div>
     </form>
   );

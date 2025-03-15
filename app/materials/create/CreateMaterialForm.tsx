@@ -90,7 +90,7 @@ const CreateMaterialForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Title</FormLabel>
-              <FormControl>
+              <FormControl className='mt-1'>
                 <Input
                   placeholder='Type the title for the material here...'
                   {...field}
@@ -106,7 +106,7 @@ const CreateMaterialForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Content</FormLabel>
-              <FormControl>
+              <FormControl className='mt-1'>
                 <Tiptap
                   placeholder='Type the content for the material here...'
                   content={field.value}
