@@ -16,13 +16,13 @@ const HeaderToolbar = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <Link href='/' className='flex items-center gap-4'>
+      {/* <Link href='/' className='flex items-center gap-4'>
         <ArrowLeft width={20} height={20} />
         <span className='text-sm-medium whitespace-nowrap'>
           Go to Dashboard
         </span>
-      </Link>
-      <Separator orientation='vertical' className='h-10' />
+      </Link> */}
+      {/* <Separator orientation='vertical' className='h-10' /> */}
       <Button variant='destructive' size='iconRight'>
         Delete Material
         <Trash2 strokeWidth={1.5} width={16} height={16} />

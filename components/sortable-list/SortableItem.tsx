@@ -68,6 +68,7 @@ export const DragHandle = ({ className }: { className?: string }) => {
 
   return (
     <button
+      type='button'
       className={cn(className)}
       style={{ touchAction: 'none', WebkitTapHighlightColor: 'transparent' }}
       {...attributes}

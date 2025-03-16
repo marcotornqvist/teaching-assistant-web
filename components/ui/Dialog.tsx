@@ -32,21 +32,19 @@ const DialogOverlay = ({
 );
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-// const DialogContent = React.forwardRef<
-//   React.ElementRef<typeof DialogPrimitive.Content>,
-//   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
-// >(({ className, children, ...props }, ref) => (
 const DialogContent = ({
   className,
   children,
+  hidePortal = false,
   ref,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
   className?: string;
   children: React.ReactNode;
+  hidePortal?: boolean;
   ref?: React.Ref<HTMLDivElement>;
 }) => (
-  <DialogPortal>
+  <>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
@@ -62,7 +60,7 @@ const DialogContent = ({
         <span className='sr-only'>Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
-  </DialogPortal>
+  </>
 );
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 

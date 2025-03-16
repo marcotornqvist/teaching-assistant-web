@@ -13,12 +13,12 @@ const Page = () => {
   return (
     <CreateTaskProvider>
       <TaskForm />
-      <ChatBox
+      {/* <ChatBox
         className='mt-0'
         submit={() => {}}
         isLoading={isLoading}
         stop={stop}
-      />
+      /> */}
     </CreateTaskProvider>
   );
 };

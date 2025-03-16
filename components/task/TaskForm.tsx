@@ -61,6 +61,7 @@ export type TaskFormData = z.infer<typeof CreateTaskFormSchema>;
 
 const Page = () => {
   const {
+    setIsLoading,
     formData,
     setFormData,
     handleQuestionChange,
@@ -77,7 +78,6 @@ const Page = () => {
     handleItemsChange,
     handleRemoveAnswer,
   } = useCreateTaskContext();
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
@@ -86,6 +86,7 @@ const Page = () => {
     try {
       const validatedData = CreateTaskFormSchema.parse(formData);
       handleResetAllErrors();
+      setTimeout(() => {}, 1000);
       console.log('submitted', validatedData);
       toast.success('Task submitted successfully!');
     } catch (error) {

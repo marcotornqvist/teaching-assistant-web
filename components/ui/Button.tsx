@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default:
           'hover:enabled:border-green bg-black focus-visible:enabled:text-green hover:enabled:text-green focus-visible:outline outline-green',
         destructive:
-          'hover:border-red bg-black focus-visible:text-red hover:text-red focus-visible:outline outline-red',
+          'hover:enabled:border-red bg-black focus-visible:enabled:text-red hover:enabled:text-red focus-visible:outline outline-red',
       },
       size: {
         default: 'px-4',

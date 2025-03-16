@@ -31,7 +31,9 @@ export type QuestionItemHandlerType = {
 };
 
 type CreateTaskContextType = {
+  isLoading: boolean;
   formData: TaskFormData;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
   setFormData: Dispatch<SetStateAction<TaskFormData>>;
   handleListsChange: (newItems: TaskFormData['items']) => void;
   handleAddQuestion: () => void;
@@ -40,9 +42,11 @@ type CreateTaskContextType = {
 } & QuestionItemHandlerType;
 
 const CreateTaskContext = createContext<CreateTaskContextType>({
+  isLoading: false,
   formData: {
     items: [],
   },
+  setIsLoading: () => {},
   setFormData: () => {},
   handleListsChange: () => {},
   handleItemsChange: () => {},
@@ -65,6 +69,7 @@ export const CreateTaskProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<TaskFormData>({
     items: [
       {
@@ -324,6 +329,8 @@ export const CreateTaskProvider = ({
   return (
     <CreateTaskContext.Provider
       value={{
+        isLoading,
+        setIsLoading,
         formData,
         setFormData,
         handleQuestionChange,

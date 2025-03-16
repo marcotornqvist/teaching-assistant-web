@@ -161,6 +161,7 @@ export const ContainerDragHandle = ({ className }: { className?: string }) => {
       {...attributes}
       {...listeners}
       ref={ref}
+      type='button'
     >
       <GripVertical
         strokeWidth={1.5}

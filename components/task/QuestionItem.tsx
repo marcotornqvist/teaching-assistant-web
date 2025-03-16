@@ -11,7 +11,7 @@ import {
   NotepadText,
   WandSparkles,
 } from 'lucide-react';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import {
   SortableContainerItem,
   ContainerDragHandle,
@@ -37,18 +37,32 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
   handleToggleTextAnswer,
   handleRemoveQuestion,
 }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const errorsExist =
+    item.errors.length > 0 ||
+    item.answers.some((answer) => answer.errors.length > 0);
+
+  useEffect(() => {
+    if (ref.current && errorsExist) {
+      console.log('scrolling to ref');
+      ref.current.scrollIntoView({
+        block: 'center',
+      });
+    }
+  }, [ref.current, errorsExist]);
+
   return (
     <SortableContainerItem
       id={item.id}
       className={cn(
         'flex w-full flex-col rounded-md border bg-black p-3 lg:relative lg:p-5',
-        item.errors.length > 0 ||
-          item.answers.some((answer) => answer.errors.length > 0)
-          ? 'border-red'
-          : 'border-black',
+        errorsExist ? 'border-red' : 'border-black',
       )}
     >
-      <div className='flex items-center justify-between max-lg:relative max-lg:mb-5'>
+      <div
+        className='flex items-center justify-between max-lg:relative max-lg:mb-5'
+        ref={ref}
+      >
         <ContainerDragHandle className='lg:absolute lg:-left-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2' />
         <button
           className='group rounded-full outline-none lg:absolute lg:-right-12 lg:top-1/2 lg:-translate-y-1/2 lg:p-2'

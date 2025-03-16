@@ -24,7 +24,7 @@ const Header = ({ children, variant = 'default', className }: HeaderProps) => {
         )}
       >
         <Link href='/' className='text-lg-bold whitespace-nowrap'>
-          AI Assistant
+          Study Platform
         </Link>
       </div>
       <div
