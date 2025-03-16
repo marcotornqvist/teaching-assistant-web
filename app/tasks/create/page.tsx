@@ -1,25 +1,30 @@
 'use client';
 
-import ChatBox from 'components/misc/chat-box/ChatBox';
-import TaskForm, { TaskFormData } from 'components/task/TaskForm';
-import Toolbar from 'components/task/Toolbar';
-import { CreateTaskProvider } from 'lib/context/CreateTaskProvider';
-import { generateId } from 'lib/helpers/generateId';
+import Step1, { Step1FormData } from 'components/task/Step1';
 import React, { useState } from 'react';
+import { useCreateTaskContext } from 'lib/context/CreateTaskProvider';
+import Step2 from 'components/task/Step2';
+import Steps, { Step } from 'components/task/Steps';
 
 const Page = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading, formData, setFormData } =
+    useCreateTaskContext();
+  const [step, setStep] = useState<Step>(1);
+
+  // const [formData, setFormData] = React.useState<Step1FormData>({
+  //   items: [],
+  // });
+  // const [isLoading, setIsLoading] = React.useState(false);
 
   return (
-    <CreateTaskProvider>
-      <TaskForm />
-      {/* <ChatBox
-        className='mt-0'
-        submit={() => {}}
-        isLoading={isLoading}
-        stop={stop}
-      /> */}
-    </CreateTaskProvider>
+    <Steps
+      step={step}
+      isLoading={isLoading}
+      formData={formData}
+      setStep={setStep}
+      setIsLoading={setIsLoading}
+      setFormData={setFormData}
+    />
   );
 };
 

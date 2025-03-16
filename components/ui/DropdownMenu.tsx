@@ -119,7 +119,7 @@ const DropdownMenuCheckboxItem = ({
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'text-sm relative flex h-9 w-full cursor-default select-none items-center rounded-sm border border-b border-black py-1.5 pl-8 pr-2 outline-none transition-colors hover:border-green focus-visible:border-green data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'text-sm relative flex h-9 w-full cursor-default select-none items-center rounded-md border border-b border-black py-1.5 pl-8 pr-2 outline-none transition-colors hover:border-green focus-visible:border-green data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     checked={checked}

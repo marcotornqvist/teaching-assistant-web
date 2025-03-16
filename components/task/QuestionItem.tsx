@@ -17,11 +17,30 @@ import {
   ContainerDragHandle,
 } from 'components/sortable-list/SortableContainer';
 import { SortableList } from 'components/sortable-list/SortableList';
-import { INPUT_MAX_LENGTH, TaskFormData } from './TaskForm';
-import { QuestionItemHandlerType } from 'lib/context/CreateTaskProvider';
+import { INPUT_MAX_LENGTH, Step1FormData } from './Step1';
+
+type QuestionItemHandlerType = {
+  handleQuestionChange: (itemId: string, value: string) => void;
+  handleItemsChange: (
+    questionId: string,
+    newAnswers: Step1FormData['items'][0]['answers'],
+  ) => void;
+  handleAnswerTextChange: (
+    itemId: string,
+    answerId: string,
+    value: string,
+  ) => void;
+  handleCorrectAnswerToggle: (itemId: string, answerId: string) => void;
+  handleRemoveAnswer: (itemId: string, answerId: string) => void;
+  handleAddAnswer: (itemId: string) => void;
+  handleToggleHint: (itemId: string) => void;
+  handleHintTextChange: (itemId: string, value: string) => void;
+  handleToggleTextAnswer: (itemId: string) => void;
+  handleRemoveQuestion: (itemId: string) => void;
+};
 
 type QuestionItemProps = {
-  item: TaskFormData['items'][0];
+  item: Step1FormData['items'][0];
 } & QuestionItemHandlerType;
 
 const QuestionItem: React.FC<QuestionItemProps> = ({

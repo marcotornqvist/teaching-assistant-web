@@ -172,7 +172,7 @@ const FormMessage = ({
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-sm text-red', className)}
+      className={cn('text-sm mt-2 text-red', className)}
       {...props}
     >
       {body}

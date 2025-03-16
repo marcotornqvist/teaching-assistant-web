@@ -4,6 +4,7 @@ import './globals.css';
 
 import ThemeProvider from 'lib/context/ThemeProvider';
 import { Toaster } from 'components/ui/Toaster';
+import { CreateTaskProvider } from 'lib/context/CreateTaskProvider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -29,8 +30,10 @@ const RootLayout = ({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <CreateTaskProvider>
+            {children}
+            <Toaster />
+          </CreateTaskProvider>
         </ThemeProvider>
       </body>
     </html>
