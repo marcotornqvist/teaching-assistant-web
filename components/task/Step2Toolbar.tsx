@@ -53,13 +53,13 @@ export const Step2Toolbar = ({
   );
 };
 
-const CreateTaskDialog = () => {
+export const CreateTaskDialog = ({ className }: { className?: string }) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type='button' size='iconRight'>
+        <Button type='button' size='iconRight' className={cn(className)}>
           Create Task
           <CirclePlus strokeWidth={1.5} width={20} />
         </Button>
@@ -68,7 +68,7 @@ const CreateTaskDialog = () => {
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
           <DialogDescription>
-            This will create a new task with the current questions and answers. 
+            This will create a new task with the current questions and answers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='flex flex-row flex-wrap gap-4'>

@@ -20,8 +20,10 @@ import {
   ChevronsDownUp,
   Eye,
   EyeOff,
+  Lightbulb,
+  Users,
 } from 'lucide-react';
-import Step2Toolbar from './Step2Toolbar';
+import Step2Toolbar, { CreateTaskDialog } from './Step2Toolbar';
 import { StepProps } from './Steps';
 import { Step1Schema } from './Step1';
 import { Label } from '@radix-ui/react-label';
@@ -48,7 +50,8 @@ import {
 } from 'components/ui/Dialog';
 
 export const Step2Schema = z.object({
-  privacy: z.boolean().default(false),
+  // privacy: z.boolean().default(false),
+  privacy: z.enum(['private', 'public', 'invite-only']).default('invite-only'),
   title: z
     .string()
     .min(3, {
@@ -85,7 +88,7 @@ const Page = (props: StepProps) => {
     reValidateMode: 'onSubmit',
     shouldUnregister: false,
     defaultValues: {
-      privacy: false,
+      privacy: 'invite-only',
       title: '',
       students: [],
       items: formData.items,
@@ -120,6 +123,21 @@ const Page = (props: StepProps) => {
 
   const [showCollapsible, setShowCollapsible] = React.useState(false);
 
+  const privacyMap = {
+    private: {
+      icon: <EyeOff width={20} height={20} strokeWidth={1.5} />,
+      label: 'Private',
+    },
+    'invite-only': {
+      icon: <Users width={20} height={20} strokeWidth={1.5} />,
+      label: 'Invite Only',
+    },
+    public: {
+      icon: <Eye width={20} height={20} strokeWidth={1.5} />,
+      label: 'Public',
+    },
+  };
+
   return (
     <>
       <Form {...form}>
@@ -128,20 +146,17 @@ const Page = (props: StepProps) => {
             <Dialog>
               <DialogTrigger asChild>
                 <Button type='button' size='iconRight'>
-                  {form.watch('privacy') === false ? 'Private' : 'Public'}
-                  {form.watch('privacy') === false ? (
-                    <EyeOff width={20} height={20} strokeWidth={1.5} />
-                  ) : (
-                    <Eye width={20} height={20} strokeWidth={1.5} />
-                  )}
+                  {privacyMap[form.watch('privacy')].label}
+                  {privacyMap[form.watch('privacy')].icon}
                 </Button>
               </DialogTrigger>
-              <DialogContent className='sm:max-w-[425px]'>
+              <DialogContent className='max-w-[520px]'>
                 <DialogHeader>
                   <DialogTitle>Select Privacy Settings</DialogTitle>
                   <DialogDescription>
-                    Select if the task should be publicly accessed by a link or
-                    only for students.
+                    Select if the task should be private (only visible to you),
+                    invite only (visible to invited students), or public
+                    (visible to everyone via link).
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
@@ -150,16 +165,16 @@ const Page = (props: StepProps) => {
                       control={form.control}
                       name='privacy'
                       render={({ field }) => (
-                        <FormItem className='flex flex-row items-center space-x-3 space-y-0'>
+                        <FormItem>
                           <FormControl>
                             <Button
                               type='button'
                               size='iconRight'
                               onClick={() => {
-                                field.onChange(false);
+                                field.onChange('private');
                               }}
                               className={cn(
-                                field.value === false &&
+                                field.value === 'private' &&
                                   'border-green text-green',
                               )}
                             >
@@ -178,16 +193,40 @@ const Page = (props: StepProps) => {
                       control={form.control}
                       name='privacy'
                       render={({ field }) => (
-                        <FormItem className='flex flex-row items-center space-x-3 space-y-0'>
+                        <FormItem>
                           <FormControl>
                             <Button
                               type='button'
                               size='iconRight'
                               onClick={() => {
-                                field.onChange(true);
+                                field.onChange('invite-only');
                               }}
                               className={cn(
-                                field.value === true &&
+                                field.value === 'invite-only' &&
+                                  'border-green text-green',
+                              )}
+                            >
+                              Set Invite Only
+                              <Users width={20} height={20} strokeWidth={1.5} />
+                            </Button>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='privacy'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Button
+                              type='button'
+                              size='iconRight'
+                              onClick={() => {
+                                field.onChange('public');
+                              }}
+                              className={cn(
+                                field.value === 'public' &&
                                   'border-green text-green',
                               )}
                             >
@@ -283,7 +322,7 @@ const Page = (props: StepProps) => {
             name='title'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Task Title</FormLabel>
                 <FormControl className='mt-1'>
                   <Input
                     placeholder='Type the title for the task here...'
@@ -299,13 +338,16 @@ const Page = (props: StepProps) => {
               <QuestionItem key={index} {...item} />
             ))}
           </div>
+          <div className='flex w-full justify-end'>
+            <CreateTaskDialog />
+          </div>
         </form>
       </Form>
     </>
   );
 };
 
-const QuestionItem = ({ text, answers }: Step1FormData['items'][0]) => {
+const QuestionItem = ({ text, hint, answers }: Step1FormData['items'][0]) => {
   return (
     <div className='flex w-full flex-col rounded-md border bg-black p-3 lg:relative lg:p-5'>
       <h3 className='text-md mb-4'>{text}</h3>
@@ -318,9 +360,19 @@ const QuestionItem = ({ text, answers }: Step1FormData['items'][0]) => {
               answer.isCorrect ? 'border-green' : 'border-red',
             )}
           >
-            <span>{answer.text}</span>
+            <span className='text-sm'>{answer.text}</span>
           </div>
         ))}
+        {hint ? (
+          <div
+            className={cn(
+              'text-sm flex min-h-12 w-full items-center justify-between gap-4 space-y-0 rounded-md border border-grey px-3 py-2.5 lg:px-5',
+            )}
+          >
+            <span className='text-sm'>{hint}</span>
+            <Lightbulb width={24} height={24} className='text-grey' />
+          </div>
+        ) : null}
       </div>
     </div>
   );
