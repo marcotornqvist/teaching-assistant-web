@@ -17,7 +17,8 @@ import {
   ContainerDragHandle,
 } from 'components/sortable-list/SortableContainer';
 import { SortableList } from 'components/sortable-list/SortableList';
-import { INPUT_MAX_LENGTH, Step1FormData } from './Step1';
+import { CHATBOX_INPUT_MAX_LENGTH } from 'lib/constants';
+import { Step1FormData } from './Step1';
 
 type QuestionItemHandlerType = {
   handleQuestionChange: (itemId: string, value: string) => void;
@@ -58,8 +59,8 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const errorsExist =
-    item.errors.length > 0 ||
-    item.answers.some((answer) => answer.errors.length > 0);
+    (item?.errors && item.errors.length > 0) ||
+    item.answers.some((answer) => answer?.errors && answer.errors.length > 0);
 
   useEffect(() => {
     if (ref.current && errorsExist) {
@@ -101,7 +102,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
             handleQuestionChange(item.id, e.target.value)
           }
           placeholder='Write your question here...'
-          maxLength={INPUT_MAX_LENGTH}
+          maxLength={CHATBOX_INPUT_MAX_LENGTH}
         />
         {item.answers.length > 0 ? (
           <SortableList
@@ -134,7 +135,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                       }
                       className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
                       placeholder='Write an answer option...'
-                      maxLength={INPUT_MAX_LENGTH}
+                      maxLength={CHATBOX_INPUT_MAX_LENGTH}
                     />
                     <Checkbox
                       checked={answer.isCorrect}
@@ -154,7 +155,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
                     />
                   </button>
                 </div>
-                {answer.errors.length > 0 ? (
+                {answer?.errors && answer.errors.length > 0 ? (
                   <span className='text-sm px-10 text-red'>
                     {answer.errors.join(' ')}
                   </span>
@@ -176,7 +177,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
               }
               className='!text-sm w-full resize-none overflow-hidden bg-black !font-normal leading-[150%] text-white outline-none lg:text-base placeholder:text-grey'
               placeholder='Write a hint...'
-              maxLength={INPUT_MAX_LENGTH}
+              maxLength={CHATBOX_INPUT_MAX_LENGTH}
             />
             <Lightbulb width={24} height={24} className='text-grey' />
           </div>
@@ -218,7 +219,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
             <NotepadText strokeWidth={1.5} width={20} height={20} />
           </Button>
         </div>
-        {item.errors.length > 0 ? (
+        {item?.errors && item.errors.length > 0 ? (
           <span className='text-sm text-red'>{item.errors.join(' ')}</span>
         ) : null}
       </div>

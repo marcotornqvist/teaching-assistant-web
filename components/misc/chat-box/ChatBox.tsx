@@ -23,6 +23,7 @@ import {
   ChatboxFormSchema,
   ChatboxFormValues,
   ChatboxRequestData,
+  ModelValues,
 } from 'lib/schema';
 import {
   CHATBOX_INPUT_MAX_LENGTH,
@@ -39,29 +40,50 @@ import {
 } from 'components/ui/Select';
 import { useState } from 'react';
 
-const ChatBox = ({
+const Chatbox = ({
   stop,
   submit,
   className,
   isLoading,
+  materials,
 }: {
   stop: () => void;
   submit: (data: ChatboxRequestData) => void;
   className?: string;
   isLoading: boolean;
+  materials?: { id: string; name: string }[];
 }) => {
-  const [selectOpen, setSelectOpen] = useState(false);
+  const [materialSelectOpen, setMaterialSelectOpen] = useState(false);
+  const [modelSelectOpen, setModelSelectOpen] = useState(false);
+
   const form = useForm<ChatboxFormValues>({
     resolver: zodResolver(ChatboxFormSchema),
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
     shouldUnregister: false,
     defaultValues: {
-      text: 'Please compare the coin mentioned in the attachment and ethereum.',
-      file: undefined,
+      text: 'Create me a set of quiz questions about kendrick lamar.',
       model: GOOGLE_MODEL,
     },
   });
+
+  // TODO: Save the selected model to local storage
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined' && window.localStorage) {
+  //     const storedModel =
+  //       (localStorage.getItem('selectedModel') as ModelValues['model']) ||
+  //       GOOGLE_MODEL;
+  //     console.log(storedModel);
+  //     form.setValue('model', storedModel);
+  //   }
+  // }, []);
+
+  // // Save the selected model to local storage
+  // useEffect(() => {
+  //   const selectedModel = form.watch('model');
+  //   localStorage.setItem('selectedModel', selectedModel);
+  // }, [form.watch('model')]);
 
   const { isValid, isSubmitting } = form.formState;
 
@@ -69,6 +91,7 @@ const ChatBox = ({
     try {
       const payload: ChatboxRequestData = {
         text: values.text,
+        materialId: undefined,
         file: undefined,
         model: values.model,
       };
@@ -122,6 +145,44 @@ const ChatBox = ({
           />
           <div className='mt-4 flex items-center justify-between'>
             <div className='flex items-center justify-start gap-3'>
+              {materials ? (
+                <FormField
+                  control={form.control}
+                  name='materialId'
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        defaultValue={field.value}
+                        onOpenChange={setMaterialSelectOpen}
+                        open={materialSelectOpen}
+                      >
+                        <FormControl>
+                          <SelectTrigger
+                            open={materialSelectOpen}
+                            disabled={materials.length === 0}
+                          >
+                            <SelectValue placeholder='Select Material' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {materials.map((material) => (
+                            <SelectItem
+                              key={material.id}
+                              value={material.id}
+                              onClick={() => {
+                                field.onChange(material.id);
+                                // setMaterialSelectOpen(false);
+                              }}
+                            >
+                              {material.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              ) : null}
               <FormField
                 control={form.control}
                 name='file'
@@ -197,11 +258,11 @@ const ChatBox = ({
                         }
                       }}
                       defaultValue={field.value}
-                      onOpenChange={setSelectOpen}
-                      open={selectOpen}
+                      onOpenChange={setModelSelectOpen}
+                      open={modelSelectOpen}
                     >
                       <FormControl>
-                        <SelectTrigger open={selectOpen}>
+                        <SelectTrigger open={modelSelectOpen}>
                           <SelectValue placeholder={GOOGLE_MODEL} />
                         </SelectTrigger>
                       </FormControl>
@@ -248,4 +309,4 @@ const ChatBox = ({
   );
 };
 
-export default ChatBox;
+export default Chatbox;

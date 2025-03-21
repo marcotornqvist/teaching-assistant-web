@@ -2,14 +2,17 @@ import { z } from 'zod';
 import {
   CHATBOX_INPUT_MAX_LENGTH,
   GOOGLE_MODEL,
+  MAX_ANSWERS,
+  MAX_QUESTIONS,
   OPENAI_MODEL,
+  STEP1_INPUT_MAX_LENGTH,
 } from './constants';
 
 export type ChatboxRequestData = z.infer<typeof ChatboxFormRequestSchema>;
 export type ChatboxFormValues = z.infer<typeof ChatboxFormSchema>;
 export type ModelValues = z.infer<typeof ModelsSchema>;
 
-const ModelsSchema = z.object({
+export const ModelsSchema = z.object({
   model: z
     .enum([GOOGLE_MODEL, OPENAI_MODEL], {
       message: 'Please select a valid model',
@@ -25,6 +28,7 @@ export const ChatboxFormSchema = z
       .max(CHATBOX_INPUT_MAX_LENGTH, {
         message: `The text must not exceed ${CHATBOX_INPUT_MAX_LENGTH} characters`,
       }),
+    materialId: z.string().optional(),
     file: z
       .instanceof(File, { message: 'Please select a file' })
       .refine((file) => file.size <= 5 * 1024 * 1024, {
@@ -55,6 +59,7 @@ export const ChatboxFormRequestSchema = z
       .max(CHATBOX_INPUT_MAX_LENGTH, {
         message: `The text must not exceed ${CHATBOX_INPUT_MAX_LENGTH} characters`,
       }),
+    materialId: z.string().optional(),
     file: z
       .object({
         name: z.string().min(1, { message: 'Filename is required' }),
@@ -144,4 +149,55 @@ export const ChatMaterialResponseSchema = CreateMaterialFormSchema.pick({
     .describe(
       'Content of the chat material. Content must be at least 50 characters and less than 200,000 characters.',
     ),
+});
+
+export const Step1Schema = z.object({
+  items: z
+    .array(
+      z.object({
+        id: z.string(),
+        text: z
+          .string()
+          .min(1, {
+            message: 'Question must be at least 1 character long.',
+          })
+          .max(STEP1_INPUT_MAX_LENGTH, {
+            message: `Question must be less than ${STEP1_INPUT_MAX_LENGTH} characters.`,
+          }),
+        hint: z
+          .string()
+          .max(STEP1_INPUT_MAX_LENGTH, {
+            message: `Hint must be less than ${STEP1_INPUT_MAX_LENGTH} characters.`,
+          })
+          .nullable(),
+        answers: z
+          .array(
+            z.object({
+              id: z.string(),
+              text: z
+                .string()
+                .min(1, {
+                  message: 'Answer must be at least 1 character long.',
+                })
+                .max(STEP1_INPUT_MAX_LENGTH, {
+                  message: `Answer must be less than ${STEP1_INPUT_MAX_LENGTH} characters.`,
+                }),
+              isCorrect: z.boolean(),
+              errors: z.array(z.string()),
+            }),
+          )
+          .min(1, {
+            message: 'At least one answer is required.',
+          })
+          .max(MAX_ANSWERS, {
+            message: 'A maximum of 10 answers is allowed per question.',
+          }),
+        textAnswer: z.boolean().default(false),
+        errors: z.array(z.string()),
+      }),
+    )
+    .min(1, { message: 'At least one question is required.' })
+    .max(MAX_QUESTIONS, {
+      message: 'A maximum of 50 questions is allowed.',
+    }),
 });

@@ -25,7 +25,8 @@ const SelectTrigger = ({
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'group text-sm flex h-10 max-w-96 items-center justify-between gap-3 rounded-md border border-dark-grey bg-black px-3 py-2 text-left outline-none transition-colors hover:border-green hover:text-green focus-visible:border-green focus-visible:text-green disabled:cursor-not-allowed data-[state=open]:border-green data-[state=open]:text-green [&>span]:line-clamp-1',
+      'group flex h-10 max-w-96 items-center justify-between gap-3 rounded-md border border-dark-grey px-3 py-2 text-left text-xs outline-none transition-colors hover:border-green hover:text-green focus-visible:border-green focus-visible:text-green data-[state=open]:border-green data-[state=open]:text-green [&>span]:line-clamp-1',
+      'disabled:text-grey disabled:opacity-50 disabled:hover:border-dark-grey disabled:hover:disabled:text-grey',
       className,
     )}
     {...props}
@@ -34,7 +35,7 @@ const SelectTrigger = ({
     <SelectPrimitive.Icon asChild>
       <ChevronDown
         className={cn(
-          'h-4 w-4 text-white group-hover:text-green group-focus-visible:text-green',
+          'h-4 w-4 group-hover:text-green group-focus-visible:active:text-green group-active:text-white group-disabled:text-grey',
           {
             'text-green': open,
           },

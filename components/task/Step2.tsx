@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import Step2Toolbar, { CreateTaskDialog } from './Step2Toolbar';
 import { StepProps } from './Steps';
-import { Step1Schema } from './Step1';
+import { Step1Schema } from 'lib/schema';
 import { Label } from '@radix-ui/react-label';
 import {
   DropdownMenu,

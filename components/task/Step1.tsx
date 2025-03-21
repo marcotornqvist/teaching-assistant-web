@@ -2,75 +2,20 @@
 
 import { Button } from 'components/ui/Button';
 import { CirclePlus } from 'lucide-react';
-import React, { FormEvent } from 'react';
+import React, { useEffect } from 'react';
 import { z } from 'zod';
 import { SortableContainer } from 'components/sortable-list/SortableContainer';
 import { toast } from 'sonner';
 import QuestionItem from 'components/task/QuestionItem';
-import Toolbar, { Step1Toolbar } from './Step1Toolbar';
-import { useRouter } from 'next/navigation';
+import { Step1Toolbar } from './Step1Toolbar';
 
 import { experimental_useObject as useObject } from '@ai-sdk/react';
 
-import ChatBox from 'components/misc/chat-box/ChatBox';
-import { ChatMaterialResponseSchema } from 'lib/schema';
+import { Step1Schema } from 'lib/schema';
 import { generateId } from 'lib/helpers/generateId';
 import { StepProps } from './Steps';
-
-export const INPUT_MAX_LENGTH = 1000;
-const MAX_QUESTIONS = 50;
-const MAX_ANSWERS = 10;
-
-export const Step1Schema = z.object({
-  items: z
-    .array(
-      z.object({
-        id: z.string(),
-        text: z
-          .string()
-          .min(1, {
-            message: 'Question must be at least 1 character long.',
-          })
-          .max(INPUT_MAX_LENGTH, {
-            message: `Question must be less than ${INPUT_MAX_LENGTH} characters.`,
-          }),
-        hint: z
-          .string()
-          .max(INPUT_MAX_LENGTH, {
-            message: `Hint must be less than ${INPUT_MAX_LENGTH} characters.`,
-          })
-          .nullable(),
-        answers: z
-          .array(
-            z.object({
-              id: z.string(),
-              text: z
-                .string()
-                .min(1, {
-                  message: 'Answer must be at least 1 character long.',
-                })
-                .max(INPUT_MAX_LENGTH, {
-                  message: `Answer must be less than ${INPUT_MAX_LENGTH} characters.`,
-                }),
-              isCorrect: z.boolean(),
-              errors: z.array(z.string()),
-            }),
-          )
-          .min(1, {
-            message: 'At least one answer is required.',
-          })
-          .max(MAX_ANSWERS, {
-            message: 'A maximum of 10 answers is allowed per question.',
-          }),
-        textAnswer: z.boolean().default(false),
-        errors: z.array(z.string()),
-      }),
-    )
-    .min(1, { message: 'At least one question is required.' })
-    .max(MAX_QUESTIONS, {
-      message: 'A maximum of 50 questions is allowed.',
-    }),
-});
+import Chatbox from 'components/misc/chat-box/Chatbox';
+import { MAX_QUESTIONS } from 'lib/constants';
 
 export type Step1FormData = z.infer<typeof Step1Schema>;
 
@@ -82,9 +27,29 @@ const Step1 = (props: StepProps) => {
     submit,
     stop,
   } = useObject({
-    api: '/api/materials/chat',
-    schema: ChatMaterialResponseSchema,
+    api: '/api/tasks/chat',
+    schema: Step1Schema,
   });
+
+  useEffect(() => {
+    if (object?.items) {
+      const items = object.items.map((item) => ({
+        ...item,
+        id: generateId(),
+        errors: item?.errors || [],
+        answers: item?.answers?.map((answer) => ({
+          ...answer,
+          errors: answer?.errors || [],
+          id: generateId(),
+        })),
+      }));
+
+      setFormData((prev) => ({
+        ...prev,
+        items: items as Step1FormData['items'],
+      }));
+    }
+  }, [object, setFormData]);
 
   const handleListsChange = (newItems: Step1FormData['items']): void => {
     setFormData((prev) => ({
@@ -359,10 +324,27 @@ const Step1 = (props: StepProps) => {
           </div>
         </div>
       </div>
-      <ChatBox
+      <Chatbox
         submit={submit}
         isLoading={isChatboxLoading}
         stop={stop}
+        materials={[
+          { id: '1', name: 'Introduction to Algebra' },
+          { id: '2', name: 'Cell Biology Fundamentals' },
+          { id: '3', name: 'World History: Ancient Civilizations' },
+          { id: '4', name: 'Literary Analysis Techniques' },
+          { id: '5', name: 'Chemistry: Periodic Table Elements' },
+          { id: '6', name: 'Physics: Laws of Motion' },
+          { id: '7', name: 'Environmental Science: Ecosystems' },
+          { id: '8', name: 'Programming Basics with Python' },
+          { id: '9', name: 'Art History: Renaissance Period' },
+          { id: '10', name: 'Geography: Climate Zones' },
+          { id: '11', name: 'Statistics: Data Analysis' },
+          { id: '12', name: 'Economics: Supply and Demand' },
+          { id: '13', name: 'Psychology: Cognitive Development' },
+          { id: '14', name: 'Music Theory Fundamentals' },
+          { id: '15', name: 'Philosophy: Ethics and Morality' },
+        ]}
         className='mt-0'
       />
     </>
