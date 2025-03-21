@@ -8,11 +8,9 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from 'components/ui/Form';
 import {
-  Loader,
   Paperclip,
   SendHorizontal,
   WandSparkles,
@@ -38,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'components/ui/Select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Chatbox = ({
   stop,
@@ -63,27 +61,25 @@ const Chatbox = ({
     shouldUnregister: false,
     defaultValues: {
       text: 'Create me a set of quiz questions about kendrick lamar.',
-      model: GOOGLE_MODEL,
     },
   });
 
   // TODO: Save the selected model to local storage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedModel =
+        (localStorage.getItem('selectedModel') as ModelValues['model']) ||
+        GOOGLE_MODEL;
+      console.log(storedModel);
+      form.setValue('model', storedModel);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined' && window.localStorage) {
-  //     const storedModel =
-  //       (localStorage.getItem('selectedModel') as ModelValues['model']) ||
-  //       GOOGLE_MODEL;
-  //     console.log(storedModel);
-  //     form.setValue('model', storedModel);
-  //   }
-  // }, []);
-
-  // // Save the selected model to local storage
-  // useEffect(() => {
-  //   const selectedModel = form.watch('model');
-  //   localStorage.setItem('selectedModel', selectedModel);
-  // }, [form.watch('model')]);
+  // Save the selected model to local storage
+  useEffect(() => {
+    const selectedModel = form.watch('model');
+    localStorage.setItem('selectedModel', selectedModel);
+  }, [form.watch('model')]);
 
   const { isValid, isSubmitting } = form.formState;
 
@@ -143,7 +139,7 @@ const Chatbox = ({
               </FormItem>
             )}
           />
-          <div className='mt-4 flex items-center justify-between'>
+          <div className='mt-4 flex flex-wrap items-center justify-between gap-4'>
             <div className='flex items-center justify-start gap-3'>
               {materials ? (
                 <FormField
@@ -279,7 +275,7 @@ const Chatbox = ({
                 )}
               />
             </div>
-            <div className='flex flex-row items-center gap-4 lg:gap-6'>
+            <div className='flex flex-1 flex-row items-center justify-end gap-4 lg:gap-6'>
               <span className='text-xs text-grey lg:text-sm'>
                 {form.watch('text')?.length || 0}/{CHATBOX_INPUT_MAX_LENGTH}
               </span>

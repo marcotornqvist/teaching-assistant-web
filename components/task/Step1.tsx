@@ -4,18 +4,18 @@ import { Button } from 'components/ui/Button';
 import { CirclePlus } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { z } from 'zod';
-import { SortableContainer } from 'components/sortable-list/SortableContainer';
+import { SortableContainer } from 'components/sortableList/SortableContainer';
 import { toast } from 'sonner';
 import QuestionItem from 'components/task/QuestionItem';
 import { Step1Toolbar } from './Step1Toolbar';
 
 import { experimental_useObject as useObject } from '@ai-sdk/react';
 
-import { Step1Schema } from 'lib/schema';
+import { ChatTaskResponseSchema, Step1Schema } from 'lib/schema';
 import { generateId } from 'lib/helpers/generateId';
 import { StepProps } from './Steps';
-import Chatbox from 'components/misc/chat-box/Chatbox';
 import { MAX_QUESTIONS } from 'lib/constants';
+import Chatbox from 'components/misc/chatbox/Chatbox';
 
 export type Step1FormData = z.infer<typeof Step1Schema>;
 
@@ -28,7 +28,7 @@ const Step1 = (props: StepProps) => {
     stop,
   } = useObject({
     api: '/api/tasks/chat',
-    schema: Step1Schema,
+    schema: ChatTaskResponseSchema,
   });
 
   useEffect(() => {
@@ -36,10 +36,10 @@ const Step1 = (props: StepProps) => {
       const items = object.items.map((item) => ({
         ...item,
         id: generateId(),
-        errors: item?.errors || [],
+        errors: [],
         answers: item?.answers?.map((answer) => ({
           ...answer,
-          errors: answer?.errors || [],
+          errors: [],
           id: generateId(),
         })),
       }));

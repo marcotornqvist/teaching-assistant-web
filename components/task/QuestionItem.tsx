@@ -15,8 +15,8 @@ import React, { ChangeEvent, useEffect, useRef } from 'react';
 import {
   SortableContainerItem,
   ContainerDragHandle,
-} from 'components/sortable-list/SortableContainer';
-import { SortableList } from 'components/sortable-list/SortableList';
+} from 'components/sortableList/SortableContainer';
+import { SortableList } from 'components/sortableList/SortableList';
 import { CHATBOX_INPUT_MAX_LENGTH } from 'lib/constants';
 import { Step1FormData } from './Step1';
 
@@ -69,7 +69,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
         block: 'center',
       });
     }
-  }, [ref.current, errorsExist]);
+  }, [errorsExist]);
 
   return (
     <SortableContainerItem

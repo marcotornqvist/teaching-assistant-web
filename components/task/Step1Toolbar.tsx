@@ -16,12 +16,8 @@ import { StepProps } from './Steps';
 type HandleNextPage = () => void;
 
 export const Step1Toolbar = ({
-  step,
-  setStep,
-  isLoading,
   formData,
   setFormData,
-  setIsLoading,
   handleNextPage,
 }: StepProps & {
   handleNextPage: HandleNextPage;

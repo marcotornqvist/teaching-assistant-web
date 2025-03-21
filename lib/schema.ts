@@ -201,3 +201,29 @@ export const Step1Schema = z.object({
       message: 'A maximum of 50 questions is allowed.',
     }),
 });
+
+// Select the fields: question, hint, answers (text, isCorrect)
+
+export const ChatTaskResponseSchema = z.object({
+  items: z
+    .array(
+      Step1Schema.shape.items.element
+        .omit({
+          id: true,
+          errors: true,
+        })
+        .extend({
+          answers: z
+            .array(
+              Step1Schema.shape.items.element.shape.answers.element.omit({
+                id: true,
+                errors: true,
+              }),
+            )
+            .min(1)
+            .max(MAX_ANSWERS),
+        }),
+    )
+    .min(1)
+    .max(MAX_QUESTIONS),
+});

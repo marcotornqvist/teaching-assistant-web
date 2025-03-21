@@ -1,8 +1,8 @@
 import Container from 'components/elements/Container';
 import Main from 'components/elements/Main';
 import Header from 'components/layout/Header';
-import { DashboardCardProps } from 'components/misc/dashboard-cards/DashboardCard';
-import DashboardCards from 'components/misc/dashboard-cards/DashboardCards';
+import { DashboardCardProps } from 'components/misc/dashboardCards/DashboardCard';
+import DashboardCards from 'components/misc/dashboardCards/DashboardCards';
 import {
   createMaterialsPageLink,
   createTasksPageLink,

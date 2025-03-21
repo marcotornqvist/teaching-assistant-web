@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 
-import { SortableList } from 'components/sortable-list/SortableList';
+import { SortableList } from 'components/sortableList/SortableList';
 import {
   SortableContainer,
   SortableContainerItem,
-} from 'components/sortable-list/SortableContainer';
+} from 'components/sortableList/SortableContainer';
 
 export function createRange<T>(
   length: number,
