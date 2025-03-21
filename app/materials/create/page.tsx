@@ -2,7 +2,7 @@
 
 import CreateMaterialForm from './CreateMaterialForm';
 import { experimental_useObject as useObject } from '@ai-sdk/react';
-import Chatbox from 'components/misc/chatbox/Chatbox';
+import Chatbox from 'components/misc/chatbox/ChatBox';
 
 import { ChatMaterialResponseSchema } from 'lib/schema';
 

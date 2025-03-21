@@ -15,7 +15,7 @@ import { ChatTaskResponseSchema, Step1Schema } from 'lib/schema';
 import { generateId } from 'lib/helpers/generateId';
 import { StepProps } from './Steps';
 import { MAX_QUESTIONS } from 'lib/constants';
-import Chatbox from 'components/misc/chatbox/Chatbox';
+import Chatbox from 'components/misc/chatbox/ChatBox';
 
 export type Step1FormData = z.infer<typeof Step1Schema>;
 

@@ -10,12 +10,7 @@ import {
   FormItem,
   FormMessage,
 } from 'components/ui/Form';
-import {
-  Paperclip,
-  SendHorizontal,
-  WandSparkles,
-  X,
-} from 'lucide-react';
+import { Paperclip, SendHorizontal, WandSparkles, X } from 'lucide-react';
 import { cn } from 'lib/utils';
 import {
   ChatboxFormSchema,
@@ -36,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'components/ui/Select';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const Chatbox = ({
   stop,
@@ -61,25 +56,9 @@ const Chatbox = ({
     shouldUnregister: false,
     defaultValues: {
       text: 'Create me a set of quiz questions about kendrick lamar.',
+      model: GOOGLE_MODEL,
     },
   });
-
-  // TODO: Save the selected model to local storage
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const storedModel =
-        (localStorage.getItem('selectedModel') as ModelValues['model']) ||
-        GOOGLE_MODEL;
-      console.log(storedModel);
-      form.setValue('model', storedModel);
-    }
-  }, []);
-
-  // Save the selected model to local storage
-  useEffect(() => {
-    const selectedModel = form.watch('model');
-    localStorage.setItem('selectedModel', selectedModel);
-  }, [form.watch('model')]);
 
   const { isValid, isSubmitting } = form.formState;
 
